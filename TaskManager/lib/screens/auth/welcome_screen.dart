@@ -7,7 +7,7 @@ import '../../widgets/brutalist_card.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 
-/// Màn hình Chào đón (Welcome Screen) - Phong cách Modern B2B SaaS mềm mại & thanh lịch
+/// Màn hình Chào đón (Welcome Screen) - Phong cách Modern B2B SaaS sắc nét, rõ ràng & tương phản cao
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -21,25 +21,25 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // 1. Top Badges: Soft Status Pills
+              // 1. Top Badges: Soft Status Pills với độ tương phản cao
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BrutalistBadge(
                     text: 'WORKSPACE OS',
-                    backgroundColor: const Color(0xFFDCEAF9),
-                    textColor: AppColors.royalCobalt,
+                    backgroundColor: const Color(0xFFD0E3F8),
+                    textColor: const Color(0xFF1E3A8A),
                     icon: Icons.auto_awesome,
-                    fontSize: 11,
+                    fontSize: 11.5,
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     borderRadius: 20,
                   ),
                   BrutalistBadge(
                     text: 'CLOUD READY',
-                    backgroundColor: AppColors.successMintLight,
-                    textColor: AppColors.successMint,
+                    backgroundColor: const Color(0xFFD1FAE5),
+                    textColor: const Color(0xFF065F46),
                     icon: Icons.fiber_manual_record,
-                    fontSize: 10,
+                    fontSize: 11,
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     borderRadius: 20,
                   ),
@@ -47,11 +47,11 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const Spacer(flex: 2),
 
-              // 2. Modern SaaS App Icon (Soft gradient & subtle glow)
+              // 2. Modern SaaS App Icon (Soft gradient & glow)
               Center(
                 child: Container(
-                  width: 88,
-                  height: 88,
+                  width: 90,
+                  height: 90,
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
                       begin: Alignment.topLeft,
@@ -70,8 +70,8 @@ class WelcomeScreen extends StatelessWidget {
                         offset: const Offset(0, 10),
                       ),
                       BoxShadow(
-                        color: AppColors.skyAzure.withValues(alpha: 0.2),
-                        blurRadius: 8,
+                        color: AppColors.skyAzure.withValues(alpha: 0.25),
+                        blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
                     ],
@@ -80,19 +80,18 @@ class WelcomeScreen extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // Họa tiết nền mờ tạo chiều sâu
                         Positioned(
                           right: 18,
                           bottom: 18,
                           child: Icon(
                             Icons.check_circle_rounded,
-                            size: 20,
-                            color: AppColors.skyAzure.withValues(alpha: 0.7),
+                            size: 22,
+                            color: AppColors.skyAzure.withValues(alpha: 0.8),
                           ),
                         ),
                         const Icon(
                           Icons.dashboard_customize_rounded,
-                          size: 46,
+                          size: 48,
                           color: Colors.white,
                         ),
                       ],
@@ -102,14 +101,14 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 22),
 
-              // 3. Tiêu đề thương hiệu thanh lịch
+              // 3. Tiêu đề thương hiệu: Đậm nét & Rõ ràng
               Text(
                 'Task Manager',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 34,
-                  fontWeight: FontWeight.w800,
-                  letterSpacing: -0.8,
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1.0,
                   height: 1.1,
                   color: AppColors.obsidianDark,
                 ),
@@ -119,24 +118,24 @@ class WelcomeScreen extends StatelessWidget {
                 'Hệ thống quản lý công việc và phân công nhiệm vụ nhóm',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.slateSteel,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF1E293B), // Chữ đậm rõ nét
                   height: 1.4,
                 ),
               ),
               const SizedBox(height: 28),
 
-              // 4. Feature Highlights Card (Mềm mại, bo góc 22px, icon pastel)
+              // 4. Feature Highlights Card (Chữ to, đậm, tương phản cao)
               BrutalistCard(
                 backgroundColor: AppColors.cardWhite,
                 borderRadius: 22.0,
-                borderWidth: 1.0,
-                borderColor: AppColors.softIceBlue,
+                borderWidth: 1.2,
+                borderColor: const Color(0xFFA5C7EE),
                 padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20.0),
                 customShadow: [
                   BoxShadow(
-                    color: AppColors.obsidianDark.withValues(alpha: 0.05),
+                    color: AppColors.obsidianDark.withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -146,29 +145,29 @@ class WelcomeScreen extends StatelessWidget {
                     _buildSoftFeatureRow(
                       icon: Icons.people_alt_rounded,
                       iconColor: AppColors.royalCobalt,
-                      bgColor: const Color(0xFFEAF2FD),
+                      bgColor: const Color(0xFFE8F1FC),
                       title: 'Giao việc & Phân quyền RBAC',
                       subtitle: 'Chỉ định phụ trách chính, cấp quyền Viewer / Editor',
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 14.0),
-                      child: Divider(color: Color(0xFFEDF2F9), height: 1, thickness: 1),
+                      child: Divider(color: Color(0xFFE2E8F0), height: 1, thickness: 1),
                     ),
                     _buildSoftFeatureRow(
                       icon: Icons.mark_email_unread_rounded,
-                      iconColor: const Color(0xFFE2831B),
-                      bgColor: const Color(0xFFFFF4E5),
+                      iconColor: const Color(0xFFD97706),
+                      bgColor: const Color(0xFFFEF3C7),
                       title: 'Thông báo In-App & Email',
                       subtitle: 'Nhận email và thông báo tức thời khi có thay đổi',
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 14.0),
-                      child: Divider(color: Color(0xFFEDF2F9), height: 1, thickness: 1),
+                      child: Divider(color: Color(0xFFE2E8F0), height: 1, thickness: 1),
                     ),
                     _buildSoftFeatureRow(
                       icon: Icons.insights_rounded,
                       iconColor: AppColors.successMint,
-                      bgColor: AppColors.successMintLight,
+                      bgColor: const Color(0xFFDCFCE7),
                       title: 'Theo dõi tiến độ & Thống kê',
                       subtitle: 'Cảnh báo hạn chót, mức ưu tiên và báo cáo KPI',
                     ),
@@ -178,11 +177,11 @@ class WelcomeScreen extends StatelessWidget {
 
               const Spacer(flex: 3),
 
-              // 5. Action Buttons: ĐĂNG NHẬP & ĐĂNG KÝ (Bo góc 16px)
+              // 5. Action Buttons: ĐĂNG NHẬP & ĐĂNG KÝ (Chữ đậm, nút rõ nét)
               BrutalistButton(
-                text: 'Đăng nhập hệ thống',
+                text: 'ĐĂNG NHẬP HỆ THỐNG',
                 icon: Icons.login_rounded,
-                height: 52,
+                height: 54,
                 borderRadius: 16.0,
                 backgroundColor: AppColors.royalCobalt,
                 textColor: Colors.white,
@@ -198,10 +197,10 @@ class WelcomeScreen extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16.0),
-                  border: Border.all(color: AppColors.softIceBlue, width: 1.2),
+                  border: Border.all(color: AppColors.royalCobalt.withValues(alpha: 0.4), width: 1.5),
                 ),
                 child: BrutalistButton(
-                  text: 'Tạo tài khoản mới',
+                  text: 'TẠO TÀI KHOẢN MỚI',
                   icon: Icons.person_add_rounded,
                   height: 52,
                   borderRadius: 16.0,
@@ -217,22 +216,29 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 18),
 
-              // 6. Student Footer Info (Thanh lịch)
+              // 6. Student Footer Info (Khung rõ nét, chữ đậm)
               Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.softIceBlue.withValues(alpha: 0.5)),
+                    border: Border.all(color: const Color(0xFF94A3B8), width: 1.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Text(
                     'KHMT2411073 • NGUYỄN NHỰT DUY',
                     style: GoogleFonts.jetBrainsMono(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w800,
                       letterSpacing: 0.8,
-                      color: AppColors.slateSteel,
+                      color: const Color(0xFF0F172A), // Chữ đen đậm rõ nét
                     ),
                   ),
                 ),
@@ -254,13 +260,13 @@ class WelcomeScreen extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 42,
-          height: 42,
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, size: 22, color: iconColor),
+          child: Icon(icon, size: 23, color: iconColor),
         ),
         const SizedBox(width: 14),
         Expanded(
@@ -270,19 +276,20 @@ class WelcomeScreen extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.obsidianDark,
+                  fontSize: 15.5,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.2,
+                  color: const Color(0xFF0F172A), // Tiêu đề đậm rõ nét
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
               Text(
                 subtitle,
                 style: GoogleFonts.inter(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.slateSteel,
-                  height: 1.3,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFF475569), // Chữ phụ sắc nét, không mờ nhạt
+                  height: 1.35,
                 ),
               ),
             ],

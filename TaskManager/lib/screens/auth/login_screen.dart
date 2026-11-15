@@ -4,7 +4,6 @@ import '../../services/auth_service.dart';
 import '../../services/api_client.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/validators.dart';
-import '../../widgets/brutalist_badge.dart';
 import '../../widgets/brutalist_button.dart';
 import '../../widgets/brutalist_card.dart';
 import '../../widgets/brutalist_text_field.dart';
@@ -12,6 +11,7 @@ import '../tasks/task_list_screen.dart';
 import 'register_screen.dart';
 import 'forgot_password_screen.dart';
 
+/// Màn hình Đăng nhập (A2) - B2B SaaS Frost-Obsidian Design
 class LoginScreen extends StatefulWidget {
   final String? initialEmail;
 
@@ -66,25 +66,24 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
-      // Thông báo thành công chuẩn Brutalist
+      // Thông báo thành công
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: AppColors.primaryAccent,
+          backgroundColor: AppColors.successMint,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryInk, width: 2),
+            borderRadius: BorderRadius.circular(12),
           ),
           content: Row(
             children: [
-              const Icon(Icons.verified_user_outlined, color: AppColors.primaryInk, size: 24),
-              const SizedBox(width: 12),
+              const Icon(Icons.check_circle_outline, color: Colors.white, size: 22),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Chào mừng ${user.fullName} trở lại!',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: AppColors.primaryInk,
-                    fontWeight: FontWeight.w700,
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -115,92 +114,76 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
-        title: Text(
-          'TASK MANAGER // OS',
-          style: GoogleFonts.spaceGrotesk(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
-          ),
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Color(0xFF0F172A)),
+          onPressed: () => Navigator.maybePop(context),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: BrutalistBadge(
-              text: 'LOGIN GATEWAY',
-              backgroundColor: AppColors.secondarySurface,
-            ),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
+        title: Text(
+          'Đăng nhập tài khoản',
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.3,
+            color: const Color(0xFF0F172A),
           ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Tag & Badge
-                Row(
-                  children: [
-                    BrutalistBadge(
-                      text: 'MODULE A // AUTHENTICATION',
-                      backgroundColor: AppColors.primaryAccent,
-                      textColor: AppColors.primaryInk,
-                      icon: Icons.lock_outline,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
 
                 // Main Title
                 Text(
-                  'ĐĂNG NHẬP',
+                  'Mừng bạn trở lại',
                   style: GoogleFonts.spaceGrotesk(
                     fontSize: 32,
                     fontWeight: FontWeight.w900,
-                    letterSpacing: -1.0,
-                    color: AppColors.primaryInk,
+                    letterSpacing: -0.8,
+                    color: const Color(0xFF0F172A),
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 8),
                 Text(
-                  'Đăng nhập tài khoản để quản lý công việc và phân quyền nhóm.',
+                  'Nhập email và mật khẩu của bạn để truy cập không gian làm việc.',
                   style: GoogleFonts.inter(
-                    fontSize: 14,
+                    fontSize: 14.5,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.secondaryText,
+                    color: const Color(0xFF475569),
+                    height: 1.4,
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 26),
 
                 // Error Banner
                 if (_errorMessage != null) ...[
-                  BrutalistCard(
-                    backgroundColor: AppColors.danger,
-                    padding: const EdgeInsets.all(12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.terracottaAlertLight,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppColors.terracottaAlert.withValues(alpha: 0.4)),
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.error_outline, color: Colors.white, size: 22),
+                        const Icon(Icons.error_outline_rounded, color: AppColors.terracottaAlert, size: 20),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             _errorMessage!,
-                            style: GoogleFonts.spaceGrotesk(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.inter(
+                              color: AppColors.terracottaAlert,
+                              fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),
@@ -208,24 +191,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 18),
                 ],
 
                 // Form Container Card
                 BrutalistCard(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(22.0),
+                  borderRadius: 22.0,
+                  borderWidth: 1.2,
+                  borderColor: const Color(0xFFA5C7EE),
                   child: Column(
                     children: [
                       // Email
                       BrutalistTextField(
-                        label: 'Email',
-                        hintText: 'VD: user@example.com',
+                        label: 'Địa chỉ Email',
+                        hintText: 'VD: duy.khmt2411073@gmail.com',
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.mail_outline_rounded, color: Color(0xFF64748B), size: 20),
                         validator: Validators.email,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
 
                       // Mật khẩu
                       BrutalistTextField(
@@ -233,17 +219,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Nhập mật khẩu tài khoản',
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.lock_outline_rounded, color: Color(0xFF64748B), size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: AppColors.primaryInk,
+                            color: const Color(0xFF64748B),
+                            size: 20,
                           ),
                           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                         ),
                         validator: (val) => Validators.required(val, 'Mật khẩu'),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 12),
 
                       // Quên mật khẩu link
                       Align(
@@ -260,64 +247,60 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           },
                           child: Text(
-                            'QUÊN MẬT KHẨU?',
-                            style: GoogleFonts.spaceGrotesk(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.primaryInk,
-                              decoration: TextDecoration.underline,
+                            'Quên mật khẩu?',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.royalCobalt,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
 
                       // Nút Đăng nhập
                       BrutalistButton(
                         text: 'ĐĂNG NHẬP HỆ THỐNG',
-                        icon: Icons.login,
+                        icon: Icons.login_rounded,
                         isLoading: _isLoading,
                         width: double.infinity,
                         height: 52,
-                        backgroundColor: AppColors.primaryAccent,
-                        textColor: AppColors.primaryInk,
+                        borderRadius: 16.0,
+                        backgroundColor: AppColors.royalCobalt,
+                        textColor: Colors.white,
                         onPressed: _handleLogin,
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
                 // Link chuyển sang Đăng ký
-                BrutalistCard(
-                  backgroundColor: AppColors.secondarySurface.withValues(alpha: 0.2),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                  shadowOffset: const Offset(2, 2),
+                Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'CHƯA CÓ TÀI KHOẢN? ',
-                        style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondaryText,
+                        'Chưa có tài khoản? ',
+                        style: GoogleFonts.inter(
+                          fontSize: 13.5,
+                          fontWeight: FontWeight.w500,
+                          color: const Color(0xFF475569),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(builder: (_) => const RegisterScreen()),
                           );
                         },
                         child: Text(
-                          'ĐĂNG KÝ NGAY',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 13,
+                          'Đăng ký ngay',
+                          style: GoogleFonts.inter(
+                            fontSize: 13.5,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.primaryInk,
-                            decoration: TextDecoration.underline,
+                            color: AppColors.royalCobalt,
                           ),
                         ),
                       ),

@@ -10,6 +10,7 @@ import '../../widgets/brutalist_card.dart';
 import '../../widgets/brutalist_text_field.dart';
 import 'login_screen.dart';
 
+/// Màn hình Đăng ký tài khoản (A1) - B2B SaaS Frost-Obsidian Design
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -62,25 +63,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       if (!mounted) return;
 
-      // Hiển thị thông báo thành công chuẩn Brutalist
+      // Hiển thị thông báo thành công
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: AppColors.primaryAccent,
+          backgroundColor: AppColors.successMint,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryInk, width: 2),
+            borderRadius: BorderRadius.circular(12),
           ),
           content: Row(
             children: [
-              const Icon(Icons.check_circle, color: AppColors.primaryInk, size: 24),
-              const SizedBox(width: 12),
+              const Icon(Icons.check_circle_outline, color: Colors.white, size: 22),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Đăng ký thành công tài khoản ${user.fullName}!',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: AppColors.primaryInk,
-                    fontWeight: FontWeight.w700,
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -113,37 +113,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
         title: Text(
-          'TASK MANAGER // OS',
+          'TASK MANAGER',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.8,
+            color: AppColors.obsidianDark,
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: EdgeInsets.only(right: 16.0),
             child: BrutalistBadge(
-              text: 'V1.0',
-              backgroundColor: AppColors.secondarySurface,
+              text: 'B2B SAAS',
+              backgroundColor: Color(0xFFD6E4F0),
+              textColor: AppColors.royalCobalt,
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
-          ),
-        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -154,8 +150,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     BrutalistBadge(
                       text: 'MODULE A // AUTHENTICATION',
-                      backgroundColor: AppColors.primaryAccent,
-                      textColor: AppColors.primaryInk,
+                      backgroundColor: AppColors.frostBackground,
+                      textColor: AppColors.royalCobalt,
                       icon: Icons.shield_outlined,
                     ),
                   ],
@@ -164,41 +160,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // Main Title
                 Text(
-                  'TẠO TÀI KHOẢN',
+                  'Tạo tài khoản mới',
                   style: GoogleFonts.spaceGrotesk(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -1.0,
-                    color: AppColors.primaryInk,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.6,
+                    color: AppColors.obsidianDark,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Đăng ký thành viên để bắt đầu quản lý và phân công công việc.',
+                  'Đăng ký thành viên để bắt đầu quản lý và phân công công việc nhóm.',
                   style: GoogleFonts.inter(
                     fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.secondaryText,
+                    fontWeight: FontWeight.w400,
+                    color: AppColors.slateSteel,
                   ),
                 ),
                 const SizedBox(height: 24),
 
                 // Error Banner nếu có
                 if (_errorMessage != null) ...[
-                  BrutalistCard(
-                    backgroundColor: AppColors.danger,
-                    padding: const EdgeInsets.all(12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: AppColors.terracottaAlertLight,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: AppColors.terracottaAlert.withValues(alpha: 0.4)),
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 22),
+                        const Icon(Icons.error_outline, color: AppColors.terracottaAlert, size: 20),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             _errorMessage!,
-                            style: GoogleFonts.spaceGrotesk(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.inter(
+                              color: AppColors.terracottaAlert,
+                              fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),
@@ -211,29 +211,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // Input Card Form
                 BrutalistCard(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(22.0),
+                  borderRadius: 18.0,
                   child: Column(
                     children: [
                       // Họ và tên
                       BrutalistTextField(
                         label: 'Họ và tên',
-                        hintText: 'VD: Huỳnh Đăng Khoa',
+                        hintText: 'VD: Nguyễn Nhựt Duy',
                         controller: _fullNameController,
-                        prefixIcon: const Icon(Icons.person_outline, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.person_outline, color: AppColors.slateSteel, size: 20),
                         validator: (val) => Validators.required(val, 'Họ và tên'),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
 
                       // Email
                       BrutalistTextField(
-                        label: 'Email',
-                        hintText: 'VD: user@example.com',
+                        label: 'Địa chỉ Email',
+                        hintText: 'VD: duy.khmt2411073@gmail.com',
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        prefixIcon: const Icon(Icons.email_outlined, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.mail_outline, color: AppColors.slateSteel, size: 20),
                         validator: Validators.email,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
 
                       // Mật khẩu
                       BrutalistTextField(
@@ -241,17 +242,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Tối thiểu 6 ký tự',
                         controller: _passwordController,
                         obscureText: _obscurePassword,
-                        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.lock_outline, color: AppColors.slateSteel, size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: AppColors.primaryInk,
+                            color: AppColors.slateSteel,
+                            size: 20,
                           ),
                           onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                         ),
                         validator: Validators.password,
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 18),
 
                       // Xác nhận mật khẩu
                       BrutalistTextField(
@@ -259,27 +261,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         hintText: 'Nhập lại mật khẩu ở trên',
                         controller: _confirmPasswordController,
                         obscureText: _obscureConfirmPassword,
-                        prefixIcon: const Icon(Icons.lock_reset_outlined, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.lock_reset_outlined, color: AppColors.slateSteel, size: 20),
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureConfirmPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                            color: AppColors.primaryInk,
+                            color: AppColors.slateSteel,
+                            size: 20,
                           ),
                           onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
                         ),
                         validator: (val) => Validators.confirmPassword(val, _passwordController.text),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 26),
 
                       // Nút Đăng ký
                       BrutalistButton(
                         text: 'ĐĂNG KÝ TÀI KHOẢN',
-                        icon: Icons.arrow_forward,
+                        icon: Icons.arrow_forward_rounded,
                         isLoading: _isLoading,
                         width: double.infinity,
-                        height: 52,
-                        backgroundColor: AppColors.primaryAccent,
-                        textColor: AppColors.primaryInk,
+                        height: 50,
+                        backgroundColor: AppColors.royalCobalt,
+                        textColor: Colors.white,
                         onPressed: _handleRegister,
                       ),
                     ],
@@ -288,19 +291,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 20),
 
                 // Link chuyển sang Đăng nhập
-                BrutalistCard(
-                  backgroundColor: AppColors.secondarySurface.withValues(alpha: 0.2),
-                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-                  shadowOffset: const Offset(2, 2),
+                Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'ĐÃ CÓ TÀI KHOẢN? ',
-                        style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondaryText,
+                        'Đã có tài khoản? ',
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       GestureDetector(
@@ -311,12 +311,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           );
                         },
                         child: Text(
-                          'ĐĂNG NHẬP NGAY',
-                          style: GoogleFonts.spaceGrotesk(
+                          'Đăng nhập ngay',
+                          style: GoogleFonts.inter(
                             fontSize: 13,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primaryInk,
-                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.royalCobalt,
                           ),
                         ),
                       ),

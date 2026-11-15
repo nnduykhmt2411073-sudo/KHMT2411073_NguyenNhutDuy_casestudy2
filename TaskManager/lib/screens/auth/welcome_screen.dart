@@ -1,188 +1,263 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../utils/app_colors.dart';
-import '../../widgets/brutalist_badge.dart';
 import '../../widgets/brutalist_button.dart';
 import '../../widgets/brutalist_card.dart';
 import 'login_screen.dart';
 import 'register_screen.dart';
 
+/// Màn hình Chào đón (Welcome Screen) - Phong cách Modern B2B SaaS sắc nét, rõ ràng & tương phản cao
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Top Status Bar Stamp
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BrutalistBadge(
-                    text: 'SYSTEM // V1.0',
-                    backgroundColor: AppColors.primaryAccent,
-                    textColor: AppColors.primaryInk,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight > 40 ? constraints.maxHeight - 40 : 0,
+                ),
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 16),
+
+                      // 1. Modern SaaS App Icon (Soft gradient & glow)
+                      Center(
+                        child: Container(
+                          width: 88,
+                          height: 88,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [
+                                AppColors.obsidianDark,
+                                AppColors.midnightIndigo,
+                                AppColors.royalCobalt,
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(24),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.royalCobalt.withValues(alpha: 0.35),
+                                blurRadius: 24,
+                                offset: const Offset(0, 10),
+                              ),
+                              BoxShadow(
+                                color: AppColors.skyAzure.withValues(alpha: 0.25),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Positioned(
+                                  right: 18,
+                                  bottom: 18,
+                                  child: Icon(
+                                    Icons.check_circle_rounded,
+                                    size: 22,
+                                    color: AppColors.skyAzure.withValues(alpha: 0.8),
+                                  ),
+                                ),
+                                const Icon(
+                                  Icons.dashboard_customize_rounded,
+                                  size: 48,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // 2. Tiêu đề thương hiệu
+                      Text(
+                        'Task Manager',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.spaceGrotesk(
+                          fontSize: 34,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: -1.0,
+                          height: 1.1,
+                          color: AppColors.obsidianDark,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Hệ thống quản lý công việc và phân công nhiệm vụ nhóm',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w600,
+                          color: const Color(0xFF1E293B),
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 26),
+
+                      // 3. Feature Highlights Card
+                      BrutalistCard(
+                        backgroundColor: AppColors.cardWhite,
+                        borderRadius: 22.0,
+                        borderWidth: 1.2,
+                        borderColor: const Color(0xFFA5C7EE),
+                        padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 18.0),
+                        customShadow: [
+                          BoxShadow(
+                            color: AppColors.obsidianDark.withValues(alpha: 0.08),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                        child: Column(
+                          children: [
+                            _buildSoftFeatureRow(
+                              icon: Icons.people_alt_rounded,
+                              iconColor: AppColors.royalCobalt,
+                              bgColor: const Color(0xFFE8F1FC),
+                              title: 'Giao việc & Phân quyền RBAC',
+                              subtitle: 'Chỉ định phụ trách chính, cấp quyền Viewer / Editor',
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 12.0),
+                              child: Divider(color: Color(0xFFE2E8F0), height: 1, thickness: 1),
+                            ),
+                            _buildSoftFeatureRow(
+                              icon: Icons.mark_email_unread_rounded,
+                              iconColor: const Color(0xFFD97706),
+                              bgColor: const Color(0xFFFEF3C7),
+                              title: 'Thông báo In-App & Email',
+                              subtitle: 'Nhận email và thông báo tức thời khi có thay đổi',
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 12.0),
+                              child: Divider(color: Color(0xFFE2E8F0), height: 1, thickness: 1),
+                            ),
+                            _buildSoftFeatureRow(
+                              icon: Icons.insights_rounded,
+                              iconColor: AppColors.successMint,
+                              bgColor: const Color(0xFFDCFCE7),
+                              title: 'Theo dõi tiến độ & Thống kê',
+                              subtitle: 'Cảnh báo hạn chót, mức ưu tiên và báo cáo KPI',
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Spacer(),
+                      const SizedBox(height: 20),
+
+                      // 4. Action Buttons: ĐĂNG NHẬP & ĐĂNG KÝ
+                      BrutalistButton(
+                        text: 'ĐĂNG NHẬP HỆ THỐNG',
+                        icon: Icons.login_rounded,
+                        height: 52,
+                        borderRadius: 16.0,
+                        backgroundColor: AppColors.royalCobalt,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const LoginScreen()),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 12),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.0),
+                          border: Border.all(color: AppColors.royalCobalt.withValues(alpha: 0.4), width: 1.5),
+                        ),
+                        child: BrutalistButton(
+                          text: 'TẠO TÀI KHOẢN MỚI',
+                          icon: Icons.person_add_rounded,
+                          height: 50,
+                          borderRadius: 16.0,
+                          backgroundColor: AppColors.cardWhite,
+                          textColor: AppColors.royalCobalt,
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // 5. Student Footer Info
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0xFF94A3B8), width: 1.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.04),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'KHMT2411073 • NGUYỄN NHỰT DUY',
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                              color: const Color(0xFF0F172A),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
                   ),
-                  BrutalistBadge(
-                    text: 'OFFLINE / ONLINE READY',
-                    backgroundColor: AppColors.secondarySurface,
-                    textColor: AppColors.primaryInk,
-                  ),
-                ],
-              ),
-              const Spacer(),
-
-              // Giant Hero Typography Stamp
-              Center(
-                child: Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryAccent,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.primaryInk,
-                      width: AppColors.borderWidth,
-                    ),
-                    boxShadow: AppColors.heavyHardShadow,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.task_alt,
-                      size: 48,
-                      color: AppColors.primaryInk,
-                    ),
-                  ),
                 ),
               ),
-              const SizedBox(height: 24),
-
-              Text(
-                'TASK MANAGER',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.spaceGrotesk(
-                  fontSize: 36,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -1.5,
-                  height: 1.0,
-                  color: AppColors.primaryInk,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'WORKFORCE COORDINATION OS',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 2.0,
-                  color: AppColors.secondaryText,
-                ),
-              ),
-              const SizedBox(height: 28),
-
-              // Feature Highlights Card
-              BrutalistCard(
-                backgroundColor: AppColors.cardWhite,
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  children: [
-                    _buildFeatureRow(
-                      icon: Icons.group_work_outlined,
-                      title: 'GIAO VIỆC & PHÂN QUYỀN',
-                      subtitle: 'Chỉ định phụ trách chính, cấp quyền Viewer / Editor',
-                    ),
-                    const Divider(color: AppColors.divider, height: 20, thickness: 1),
-                    _buildFeatureRow(
-                      icon: Icons.notifications_active_outlined,
-                      title: 'THÔNG BÁO & EMAIL',
-                      subtitle: 'Nhận email và thông báo tức thời khi có thay đổi',
-                    ),
-                    const Divider(color: AppColors.divider, height: 20, thickness: 1),
-                    _buildFeatureRow(
-                      icon: Icons.analytics_outlined,
-                      title: 'THEO DÕI TIẾN ĐỘ',
-                      subtitle: 'Thống kê hạn chót, mức ưu tiên và trạng thái',
-                    ),
-                  ],
-                ),
-              ),
-
-              const Spacer(),
-
-              // Action Buttons: ĐĂNG NHẬP & ĐĂNG KÝ
-              BrutalistButton(
-                text: 'ĐĂNG NHẬP HỆ THỐNG',
-                icon: Icons.login,
-                height: 52,
-                backgroundColor: AppColors.primaryAccent,
-                textColor: AppColors.primaryInk,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-
-              BrutalistButton(
-                text: 'TẠO TÀI KHOẢN MỚI',
-                icon: Icons.person_add_alt,
-                height: 52,
-                backgroundColor: AppColors.cardWhite,
-                textColor: AppColors.primaryInk,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Student Footer Info
-              Text(
-                'KHMT2411074 • HUỲNH ĐĂNG KHOA',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.0,
-                  color: AppColors.secondaryText,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _buildFeatureRow({
+  Widget _buildSoftFeatureRow({
     required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
     required String title,
     required String subtitle,
   }) {
     return Row(
       children: [
         Container(
-          width: 36,
-          height: 36,
+          width: 44,
+          height: 44,
           decoration: BoxDecoration(
-            color: AppColors.scaffoldBackground,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: AppColors.primaryInk, width: 1.5),
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, size: 20, color: AppColors.primaryInk),
+          child: Icon(icon, size: 23, color: iconColor),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 14),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,17 +265,20 @@ class WelcomeScreen extends StatelessWidget {
               Text(
                 title,
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 13,
+                  fontSize: 15.5,
                   fontWeight: FontWeight.w800,
-                  color: AppColors.primaryInk,
+                  letterSpacing: -0.2,
+                  color: const Color(0xFF0F172A),
                 ),
               ),
+              const SizedBox(height: 3),
               Text(
                 subtitle,
                 style: GoogleFonts.inter(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.secondaryText,
+                  color: const Color(0xFF475569),
+                  height: 1.35,
                 ),
               ),
             ],

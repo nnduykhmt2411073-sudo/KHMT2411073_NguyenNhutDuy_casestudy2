@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../utils/app_colors.dart';
 
-/// Huy hiệu nhãn chuẩn Nivora Brutalist (Viền đen 1.5px, chữ JetBrains Mono in hoa)
+/// Huy hiệu nhãn chuẩn Modern B2B SaaS (Frost-Obsidian: Bo góc tròn Pill 20px, nền nhạt tương phản thanh lịch)
 class BrutalistBadge extends StatelessWidget {
   final String text;
   final Color backgroundColor;
   final Color textColor;
+  final Color? borderColor;
   final IconData? icon;
   final double fontSize;
   final EdgeInsetsGeometry padding;
+  final double borderRadius;
 
   const BrutalistBadge({
     super.key,
     required this.text,
-    this.backgroundColor = AppColors.primaryAccent,
-    this.textColor = AppColors.primaryInk,
+    this.backgroundColor = AppColors.frostBackground,
+    this.textColor = AppColors.royalCobalt,
+    this.borderColor,
     this.icon,
     this.fontSize = 11.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+    this.padding = const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+    this.borderRadius = 20.0,
   });
 
   factory BrutalistBadge.priority(String priority) {
@@ -26,22 +30,25 @@ class BrutalistBadge extends StatelessWidget {
       case 'high':
         return const BrutalistBadge(
           text: 'HIGH',
-          backgroundColor: AppColors.danger,
-          textColor: Colors.white,
+          backgroundColor: AppColors.terracottaAlertLight,
+          textColor: AppColors.terracottaAlert,
+          borderColor: Color(0xFFF3C7C2),
           icon: Icons.priority_high,
         );
       case 'medium':
         return const BrutalistBadge(
           text: 'MEDIUM',
-          backgroundColor: AppColors.primaryAccent,
-          textColor: AppColors.primaryInk,
+          backgroundColor: Color(0xFFFFF7E6),
+          textColor: Color(0xFFD48806),
+          borderColor: Color(0xFFFFE7BA),
         );
       case 'low':
       default:
         return const BrutalistBadge(
           text: 'LOW',
-          backgroundColor: AppColors.secondarySurface,
-          textColor: AppColors.primaryInk,
+          backgroundColor: AppColors.frostBackground,
+          textColor: AppColors.slateSteel,
+          borderColor: AppColors.softIceBlue,
         );
     }
   }
@@ -51,23 +58,26 @@ class BrutalistBadge extends StatelessWidget {
       case 'completed':
         return const BrutalistBadge(
           text: 'COMPLETED',
-          backgroundColor: AppColors.success,
-          textColor: Colors.white,
-          icon: Icons.check,
+          backgroundColor: AppColors.successMintLight,
+          textColor: AppColors.successMint,
+          borderColor: Color(0xFFB7EB8F),
+          icon: Icons.check_circle_outline,
         );
       case 'in_progress':
         return const BrutalistBadge(
           text: 'IN PROGRESS',
-          backgroundColor: AppColors.primaryAccent,
-          textColor: AppColors.primaryInk,
+          backgroundColor: Color(0xFFE8F4FD),
+          textColor: AppColors.skyAzure,
+          borderColor: AppColors.softIceBlue,
           icon: Icons.timelapse,
         );
       case 'todo':
       default:
         return const BrutalistBadge(
           text: 'TODO',
-          backgroundColor: AppColors.secondarySurface,
-          textColor: AppColors.primaryInk,
+          backgroundColor: AppColors.frostBackground,
+          textColor: AppColors.slateSteel,
+          borderColor: AppColors.softIceBlue,
         );
     }
   }
@@ -78,10 +88,10 @@ class BrutalistBadge extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(4.0),
+        borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: AppColors.primaryInk,
-          width: 1.5,
+          color: borderColor ?? AppColors.softIceBlue.withValues(alpha: 0.6),
+          width: 0.8,
         ),
       ),
       child: Row(
@@ -96,7 +106,7 @@ class BrutalistBadge extends StatelessWidget {
             style: GoogleFonts.jetBrainsMono(
               fontSize: fontSize,
               fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
+              letterSpacing: 0.5,
               color: textColor,
             ),
           ),

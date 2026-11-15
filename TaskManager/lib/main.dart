@@ -6,8 +6,13 @@ import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final authService = AuthService();
-  final bool loggedIn = await authService.isLoggedIn();
+  bool loggedIn = false;
+  try {
+    final authService = AuthService();
+    loggedIn = await authService.isLoggedIn();
+  } catch (_) {
+    loggedIn = false;
+  }
 
   runApp(TaskManagerApp(isLoggedIn: loggedIn));
 }

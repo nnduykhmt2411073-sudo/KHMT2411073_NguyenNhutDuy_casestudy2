@@ -6,7 +6,6 @@ import '../../services/auth_service.dart';
 import '../../services/api_client.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/validators.dart';
-import '../../widgets/brutalist_badge.dart';
 import '../../widgets/brutalist_button.dart';
 import '../../widgets/brutalist_card.dart';
 import '../../widgets/brutalist_text_field.dart';
@@ -14,6 +13,7 @@ import '../../widgets/brutalist_avatar.dart';
 import '../auth/login_screen.dart';
 import '../auth/welcome_screen.dart';
 
+/// Màn hình Hồ sơ cá nhân & Bảo mật (A3 & A4) - B2B SaaS Frost-Obsidian
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -92,6 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  /// Cập nhật thông tin cá nhân (A3)
   Future<void> _handleSave() async {
     setState(() {
       _errorMessage = null;
@@ -119,23 +120,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: AppColors.primaryAccent,
+          backgroundColor: AppColors.successMint,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryInk, width: 2),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           content: Row(
             children: [
-              const Icon(Icons.check_circle_outline, color: AppColors.primaryInk, size: 24),
-              const SizedBox(width: 12),
+              const Icon(Icons.check_circle_outline_rounded, color: Colors.white, size: 22),
+              const SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'Cập nhật thông tin cá nhân thành công!',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: AppColors.primaryInk,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: GoogleFonts.inter(color: Colors.white, fontWeight: FontWeight.w600),
                 ),
               ),
             ],
@@ -156,6 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  /// Đổi mật khẩu tài khoản (A4)
   Future<void> _handleChangePassword() async {
     setState(() {
       _passwordErrorMessage = null;
@@ -177,42 +173,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (!mounted) return;
 
-      // Hiển thị Dialog thông báo thành công và chuyển hướng đăng nhập lại
+      _currentPasswordController.clear();
+      _newPasswordController.clear();
+      _confirmNewPasswordController.clear();
+
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (ctx) => AlertDialog(
           backgroundColor: AppColors.cardWhite,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryInk, width: 2),
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Color(0xFFA5C7EE), width: 1.2),
           ),
           title: Row(
             children: [
-              const Icon(Icons.lock_reset, color: AppColors.primaryAccent, size: 28),
+              const Icon(Icons.check_circle_outline_rounded, color: AppColors.successMint, size: 24),
               const SizedBox(width: 10),
               Text(
-                'ĐỔI MẬT KHẨU THÀNH CÔNG',
+                'Đổi mật khẩu thành công',
                 style: GoogleFonts.spaceGrotesk(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primaryInk,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: const Color(0xFF0F172A),
                 ),
               ),
             ],
           ),
           content: Text(
-            'Mật khẩu của bạn đã được cập nhật thành công. Vì lý do an toàn, phiên làm việc đã kết thúc. Vui lòng đăng nhập lại bằng mật khẩu mới.',
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: AppColors.primaryInk,
-            ),
+            'Mật khẩu của bạn đã được cập nhật an toàn. Vì lý do bảo mật, phiên làm việc đã kết thúc. Vui lòng đăng nhập lại bằng mật khẩu mới.',
+            style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: const Color(0xFF475569)),
           ),
           actions: [
             BrutalistButton(
               text: 'ĐĂNG NHẬP NGAY',
-              backgroundColor: AppColors.primaryAccent,
+              borderRadius: 14,
+              backgroundColor: AppColors.royalCobalt,
+              textColor: Colors.white,
               onPressed: () {
                 Navigator.of(ctx).pop();
                 Navigator.pushAndRemoveUntil(
@@ -239,48 +236,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  /// Hộp thoại xác nhận đăng xuất (A3)
   void _showLogoutConfirmDialog() {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.cardWhite,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: AppColors.primaryInk, width: 2),
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: Color(0xFFA5C7EE), width: 1.2),
         ),
         title: Text(
-          'XÁC NHẬN ĐĂNG XUẤT',
-          style: GoogleFonts.spaceGrotesk(
-            fontSize: 18,
-            fontWeight: FontWeight.w900,
-            color: AppColors.primaryInk,
-          ),
+          'Xác nhận đăng xuất',
+          style: GoogleFonts.spaceGrotesk(fontSize: 18, fontWeight: FontWeight.w800, color: const Color(0xFF0F172A)),
         ),
         content: Text(
           'Bạn có chắc chắn muốn đăng xuất khỏi hệ thống Task Manager?',
-          style: GoogleFonts.inter(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: AppColors.secondaryText,
-          ),
+          style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w500, color: const Color(0xFF475569)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: Text(
-              'HỦY',
-              style: GoogleFonts.spaceGrotesk(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: AppColors.secondaryText,
-              ),
+              'HỦY BỎ',
+              style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w700, color: const Color(0xFF64748B)),
             ),
           ),
           BrutalistButton(
             text: 'ĐĂNG XUẤT',
-            icon: Icons.logout,
-            backgroundColor: AppColors.danger,
+            icon: Icons.logout_rounded,
+            backgroundColor: AppColors.terracottaAlert,
             textColor: Colors.white,
+            borderRadius: 12,
             height: 42,
             onPressed: () async {
               Navigator.of(ctx).pop();
@@ -306,99 +293,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : 'Chưa có thông tin';
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Color(0xFF0F172A)),
+          onPressed: () => Navigator.maybePop(context),
+        ),
         title: Text(
-          'HỒ SƠ CÁ NHÂN',
+          'Hồ sơ cá nhân & Bảo mật',
           style: GoogleFonts.spaceGrotesk(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
+            fontSize: 18,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.3,
+            color: const Color(0xFF0F172A),
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout, color: AppColors.primaryInk),
+            icon: const Icon(Icons.logout_rounded, color: AppColors.terracottaAlert),
             tooltip: 'Đăng xuất',
             onPressed: _showLogoutConfirmDialog,
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
-          ),
-        ),
       ),
       body: _isLoading
           ? const Center(
-              child: CircularProgressIndicator(
-                color: AppColors.primaryInk,
-                strokeWidth: 3,
-              ),
+              child: CircularProgressIndicator(color: AppColors.royalCobalt, strokeWidth: 3),
             )
           : SafeArea(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Header Badge & Title
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        BrutalistBadge(
-                          text: 'MODULE A // PROFILE & SECURITY',
-                          backgroundColor: AppColors.primaryAccent,
-                          textColor: AppColors.primaryInk,
-                          icon: Icons.shield_outlined,
-                        ),
-                        BrutalistBadge(
-                          text: 'A4 READY',
-                          backgroundColor: AppColors.secondarySurface,
-                          textColor: AppColors.primaryInk,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'TÀI KHOẢN & BẢO MẬT',
-                      style: GoogleFonts.spaceGrotesk(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                        color: AppColors.primaryInk,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Quản lý thông tin hồ sơ và đổi mật khẩu bảo mật tài khoản.',
-                      style: GoogleFonts.inter(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.secondaryText,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
                     // Error Banner hồ sơ nếu có
                     if (_errorMessage != null) ...[
-                      BrutalistCard(
-                        backgroundColor: AppColors.danger,
-                        padding: const EdgeInsets.all(12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.terracottaAlertLight,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: AppColors.terracottaAlert.withValues(alpha: 0.4)),
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(Icons.error_outline, color: Colors.white, size: 22),
+                            const Icon(Icons.error_outline_rounded, color: AppColors.terracottaAlert, size: 20),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 _errorMessage!,
-                                style: GoogleFonts.spaceGrotesk(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
+                                style: GoogleFonts.inter(
+                                  color: AppColors.terracottaAlert,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: 13,
                                 ),
                               ),
@@ -409,13 +358,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 16),
                     ],
 
-                    // Profile Hero Card
+                    // Profile Hero Card (A3)
                     BrutalistCard(
                       backgroundColor: AppColors.cardWhite,
+                      borderRadius: 22.0,
+                      borderWidth: 1.2,
+                      borderColor: const Color(0xFFA5C7EE),
                       padding: const EdgeInsets.all(20.0),
                       child: Row(
                         children: [
-                          // Avatar Box (Synchronized BrutalistAvatar)
                           BrutalistAvatar(
                             avatarUrl: _avatarUrlController.text.isNotEmpty
                                 ? _avatarUrlController.text
@@ -423,11 +374,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             name: _user?.fullName ?? 'U',
                             size: 68,
                             shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(8.0),
+                            borderRadius: BorderRadius.circular(16.0),
                           ),
                           const SizedBox(width: 16),
-
-                          // User Info preview
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -435,9 +384,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Text(
                                   _user?.fullName ?? 'Chưa cập nhật',
                                   style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 18,
+                                    fontSize: 19,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.primaryInk,
+                                    color: const Color(0xFF0F172A),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -446,21 +395,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Text(
                                   _user?.email ?? '',
                                   style: GoogleFonts.jetBrainsMono(
-                                    fontSize: 12,
+                                    fontSize: 12.5,
                                     fontWeight: FontWeight.w600,
-                                    color: AppColors.secondaryText,
+                                    color: const Color(0xFF475569),
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 const SizedBox(height: 6),
-                                Text(
-                                  'NGÀY TẠO: $createdDateStr',
-                                  style: GoogleFonts.jetBrainsMono(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.secondaryText,
-                                    letterSpacing: 0.5,
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF1F5F9),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    'NGÀY TẠO: $createdDateStr',
+                                    style: GoogleFonts.jetBrainsMono(
+                                      fontSize: 10.5,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF64748B),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -469,60 +424,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                    // Form Chỉnh sửa thông tin
+                    // Form Chỉnh sửa thông tin cá nhân (A3)
                     Form(
                       key: _profileFormKey,
                       child: BrutalistCard(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(22.0),
+                        borderRadius: 22.0,
+                        borderWidth: 1.2,
+                        borderColor: const Color(0xFFA5C7EE),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.edit_outlined, color: AppColors.primaryInk, size: 20),
+                                const Icon(Icons.edit_note_rounded, color: AppColors.royalCobalt, size: 24),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'CHỈNH SỬA THÔNG TIN',
+                                  'Cập nhật thông tin cá nhân',
                                   style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 16,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.primaryInk,
+                                    color: const Color(0xFF0F172A),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Họ và tên
                             BrutalistTextField(
                               label: 'Họ và tên',
                               hintText: 'Nhập họ và tên đầy đủ',
                               controller: _fullNameController,
-                              prefixIcon: const Icon(Icons.person_outline, color: AppColors.primaryInk),
+                              prefixIcon: const Icon(Icons.person_outline_rounded, color: Color(0xFF64748B), size: 20),
                               validator: (val) => Validators.required(val, 'Họ và tên'),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Email (Read only)
                             BrutalistTextField(
-                              label: 'Email (Cố định)',
+                              label: 'Địa chỉ Email (Cố định)',
                               hintText: _user?.email ?? '',
                               enabled: false,
                               controller: TextEditingController(text: _user?.email ?? ''),
-                              prefixIcon: const Icon(Icons.lock_outline, color: AppColors.secondaryText),
+                              prefixIcon: const Icon(Icons.lock_outline_rounded, color: Color(0xFF94A3B8), size: 20),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Chọn nhanh Preset Avatar
                             Text(
                               'CHỌN AVATAR NHANH (HOẶC NHẬP LINK WEB)',
                               style: GoogleFonts.jetBrainsMono(
                                 fontSize: 11,
-                                fontWeight: FontWeight.w900,
-                                color: AppColors.secondaryText,
-                                letterSpacing: 0.8,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFF475569),
+                                letterSpacing: 0.5,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -546,7 +504,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                color: isSelected ? AppColors.danger : Colors.transparent,
+                                                color: isSelected ? AppColors.royalCobalt : Colors.transparent,
                                                 width: 2.5,
                                               ),
                                             ),
@@ -562,7 +520,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             style: GoogleFonts.jetBrainsMono(
                                               fontSize: 10,
                                               fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-                                              color: isSelected ? AppColors.danger : AppColors.secondaryText,
+                                              color: isSelected ? AppColors.royalCobalt : const Color(0xFF64748B),
                                             ),
                                           ),
                                         ],
@@ -572,26 +530,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 }).toList(),
                               ),
                             ),
-                            const SizedBox(height: 14),
+                            const SizedBox(height: 16),
 
                             // URL Ảnh đại diện
                             BrutalistTextField(
                               label: 'Đường dẫn ảnh đại diện (Tùy chọn)',
                               hintText: 'https://example.com/avatar.jpg',
                               controller: _avatarUrlController,
-                              prefixIcon: const Icon(Icons.image_outlined, color: AppColors.primaryInk),
+                              prefixIcon: const Icon(Icons.image_outlined, color: Color(0xFF64748B), size: 20),
                             ),
                             const SizedBox(height: 24),
 
                             // Nút lưu thay đổi hồ sơ
                             BrutalistButton(
                               text: 'LƯU THAY ĐỔI HỒ SƠ',
-                              icon: Icons.save_outlined,
+                              icon: Icons.save_rounded,
                               isLoading: _isSaving,
                               width: double.infinity,
                               height: 52,
-                              backgroundColor: AppColors.primaryAccent,
-                              textColor: AppColors.primaryInk,
+                              borderRadius: 16,
+                              backgroundColor: AppColors.royalCobalt,
+                              textColor: Colors.white,
                               onPressed: _handleSave,
                             ),
                           ],
@@ -604,55 +563,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Form(
                       key: _passwordFormKey,
                       child: BrutalistCard(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.all(22.0),
+                        borderRadius: 22.0,
+                        borderWidth: 1.2,
+                        borderColor: const Color(0xFFA5C7EE),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               children: [
-                                const Icon(Icons.password_outlined, color: AppColors.primaryInk, size: 20),
+                                const Icon(Icons.lock_reset_rounded, color: AppColors.royalCobalt, size: 24),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'ĐỔI MẬT KHẨU',
+                                  'Đổi mật khẩu tài khoản',
                                   style: GoogleFonts.spaceGrotesk(
-                                    fontSize: 16,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.primaryInk,
+                                    color: const Color(0xFF0F172A),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
-                              'Nhập mật khẩu cũ và đặt mật khẩu mới tối thiểu 6 ký tự.',
+                              'Nhập mật khẩu hiện tại và tạo mật khẩu mới tối thiểu 6 ký tự.',
                               style: GoogleFonts.inter(
-                                fontSize: 12,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w500,
-                                color: AppColors.secondaryText,
+                                color: const Color(0xFF475569),
                               ),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Error Banner đổi mật khẩu nếu có
                             if (_passwordErrorMessage != null) ...[
                               Container(
-                                padding: const EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.danger,
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                  color: AppColors.terracottaAlertLight,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: AppColors.terracottaAlert.withValues(alpha: 0.4)),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.error_outline, color: Colors.white, size: 18),
-                                    const SizedBox(width: 8),
+                                    const Icon(Icons.error_outline_rounded, color: AppColors.terracottaAlert, size: 20),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Text(
                                         _passwordErrorMessage!,
-                                        style: GoogleFonts.spaceGrotesk(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 12,
+                                        style: GoogleFonts.inter(
+                                          color: AppColors.terracottaAlert,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
                                         ),
                                       ),
                                     ),
@@ -665,20 +627,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // Mật khẩu hiện tại
                             BrutalistTextField(
                               label: 'Mật khẩu hiện tại',
-                              hintText: 'Nhập mật khẩu cũ',
+                              hintText: 'Nhập mật khẩu đang dùng',
                               controller: _currentPasswordController,
                               obscureText: _obscureCurrentPw,
-                              prefixIcon: const Icon(Icons.lock_clock_outlined, color: AppColors.primaryInk),
+                              prefixIcon: const Icon(Icons.lock_clock_outlined, color: Color(0xFF64748B), size: 20),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureCurrentPw ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                  color: AppColors.primaryInk,
+                                  color: const Color(0xFF64748B),
+                                  size: 20,
                                 ),
                                 onPressed: () => setState(() => _obscureCurrentPw = !_obscureCurrentPw),
                               ),
                               validator: (val) => Validators.required(val, 'Mật khẩu hiện tại'),
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Mật khẩu mới
                             BrutalistTextField(
@@ -686,17 +649,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               hintText: 'Tối thiểu 6 ký tự',
                               controller: _newPasswordController,
                               obscureText: _obscureNewPw,
-                              prefixIcon: const Icon(Icons.lock_outline, color: AppColors.primaryInk),
+                              prefixIcon: const Icon(Icons.lock_outline_rounded, color: Color(0xFF64748B), size: 20),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureNewPw ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                  color: AppColors.primaryInk,
+                                  color: const Color(0xFF64748B),
+                                  size: 20,
                                 ),
                                 onPressed: () => setState(() => _obscureNewPw = !_obscureNewPw),
                               ),
                               validator: Validators.password,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 18),
 
                             // Xác nhận mật khẩu mới
                             BrutalistTextField(
@@ -704,11 +668,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               hintText: 'Nhập lại mật khẩu mới',
                               controller: _confirmNewPasswordController,
                               obscureText: _obscureConfirmNewPw,
-                              prefixIcon: const Icon(Icons.lock_reset_outlined, color: AppColors.primaryInk),
+                              prefixIcon: const Icon(Icons.lock_reset_outlined, color: Color(0xFF64748B), size: 20),
                               suffixIcon: IconButton(
                                 icon: Icon(
                                   _obscureConfirmNewPw ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                                  color: AppColors.primaryInk,
+                                  color: const Color(0xFF64748B),
+                                  size: 20,
                                 ),
                                 onPressed: () => setState(() => _obscureConfirmNewPw = !_obscureConfirmNewPw),
                               ),
@@ -719,12 +684,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             // Nút Đổi mật khẩu
                             BrutalistButton(
                               text: 'CẬP NHẬT MẬT KHẨU',
-                              icon: Icons.key_outlined,
+                              icon: Icons.key_rounded,
                               isLoading: _isChangingPassword,
                               width: double.infinity,
                               height: 52,
-                              backgroundColor: AppColors.cardWhite,
-                              textColor: AppColors.primaryInk,
+                              borderRadius: 16,
+                              backgroundColor: AppColors.royalCobalt,
+                              textColor: Colors.white,
                               onPressed: _handleChangePassword,
                             ),
                           ],
@@ -733,16 +699,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Section Nút Đăng Xuất (A4)
-                    BrutalistButton(
-                      text: 'ĐĂNG XUẤT KHỎI HỆ THỐNG',
-                      icon: Icons.logout,
-                      height: 50,
-                      backgroundColor: AppColors.danger,
-                      textColor: Colors.white,
-                      onPressed: _showLogoutConfirmDialog,
+                    // Section Nút Đăng Xuất (A3)
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                        border: Border.all(color: AppColors.terracottaAlert.withValues(alpha: 0.5), width: 1.2),
+                      ),
+                      child: BrutalistButton(
+                        text: 'ĐĂNG XUẤT KHỎI HỆ THỐNG',
+                        icon: Icons.logout_rounded,
+                        height: 52,
+                        borderRadius: 16.0,
+                        backgroundColor: AppColors.terracottaAlertLight,
+                        textColor: AppColors.terracottaAlert,
+                        onPressed: _showLogoutConfirmDialog,
+                      ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),

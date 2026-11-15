@@ -5,7 +5,6 @@ import '../models/user.dart';
 import '../services/task_service.dart';
 import '../utils/app_colors.dart';
 import 'brutalist_button.dart';
-import 'brutalist_card.dart';
 import 'brutalist_user_picker.dart';
 
 class BrutalistShareModal {
@@ -167,12 +166,16 @@ class _ShareModalContentState extends State<_ShareModalContent> {
           const SizedBox(height: 12),
 
           if (_errorMessage != null) ...[
-            BrutalistCard(
-              backgroundColor: const Color(0xFFFED7D7),
-              padding: const EdgeInsets.all(10),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.terracottaAlertLight,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.terracottaAlertBorder, width: 0.8),
+              ),
               child: Text(
                 _errorMessage!,
-                style: GoogleFonts.inter(fontSize: 12, color: AppColors.danger, fontWeight: FontWeight.w700),
+                style: GoogleFonts.inter(fontSize: 12, color: AppColors.terracottaAlert, fontWeight: FontWeight.w600),
               ),
             ),
             const SizedBox(height: 12),
@@ -183,20 +186,31 @@ class _ShareModalContentState extends State<_ShareModalContent> {
             'CHỌN NGƯỜI ĐƯỢC CHIA SẺ',
             style: GoogleFonts.jetBrainsMono(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: AppColors.secondaryText,
+              fontWeight: FontWeight.w700,
+              color: AppColors.slateSteel,
             ),
           ),
           const SizedBox(height: 6),
           GestureDetector(
             onTap: _pickUser,
-            child: BrutalistCard(
-              padding: const EdgeInsets.all(12),
-              backgroundColor: AppColors.cardWhite,
+            child: Container(
+              padding: const EdgeInsets.all(14),
+              decoration: BoxDecoration(
+                color: AppColors.cardWhite,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x0603040B),
+                    offset: Offset(0, 2),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
               child: Row(
                 children: [
-                  const Icon(Icons.person_search, color: AppColors.primaryInk, size: 20),
-                  const SizedBox(width: 10),
+                  const Icon(Icons.person_search_rounded, color: AppColors.royalCobalt, size: 22),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       _selectedUser != null
@@ -206,14 +220,14 @@ class _ShareModalContentState extends State<_ShareModalContent> {
                               : 'Nhấn để tìm kiếm hoặc chọn thành viên...'),
                       style: GoogleFonts.inter(
                         fontSize: 13,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         color: _selectedUser != null || _emailController.text.isNotEmpty
-                            ? AppColors.primaryInk
-                            : AppColors.secondaryText,
+                            ? AppColors.obsidianDark
+                            : AppColors.slateSteel,
                       ),
                     ),
                   ),
-                  const Icon(Icons.chevron_right, size: 20, color: AppColors.primaryInk),
+                  const Icon(Icons.chevron_right_rounded, size: 20, color: AppColors.slateSteel),
                 ],
               ),
             ),
@@ -225,8 +239,8 @@ class _ShareModalContentState extends State<_ShareModalContent> {
             'VAI TRÒ & PHÂN QUYỀN (RBAC)',
             style: GoogleFonts.jetBrainsMono(
               fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: AppColors.secondaryText,
+              fontWeight: FontWeight.w700,
+              color: AppColors.slateSteel,
             ),
           ),
           const SizedBox(height: 8),
@@ -235,31 +249,36 @@ class _ShareModalContentState extends State<_ShareModalContent> {
             role: 'viewer',
             title: 'VIEWER (CHỈ XEM)',
             subtitle: 'Chỉ có quyền xem tiến độ và chi tiết, không được chỉnh sửa hay đổi trạng thái.',
-            color: AppColors.secondarySurface,
+            selectedBg: const Color(0xFFF1F5F9),
+            selectedBorder: AppColors.slateSteel,
+            textColor: AppColors.obsidianDark,
           ),
           const SizedBox(height: 8),
           _buildRoleOption(
             role: 'editor',
             title: 'EDITOR (CHỈNH SỬA)',
             subtitle: 'Được quyền cập nhật nội dung, hạn chót và đổi trạng thái tiến độ công việc.',
-            color: AppColors.primaryAccent,
+            selectedBg: const Color(0xFFEFF6FF),
+            selectedBorder: AppColors.royalCobalt,
+            textColor: AppColors.royalCobalt,
           ),
           const SizedBox(height: 8),
           _buildRoleOption(
             role: 'admin',
             title: 'ADMIN (QUẢN TRỊ VIÊN)',
             subtitle: 'Toàn quyền quản trị công việc: chỉnh sửa, phân công, chia sẻ thêm hoặc xóa.',
-            color: AppColors.danger,
-            textWhite: true,
+            selectedBg: AppColors.terracottaAlertLight,
+            selectedBorder: AppColors.terracottaAlert,
+            textColor: AppColors.terracottaAlert,
           ),
           const SizedBox(height: 20),
 
           // Submit button
           BrutalistButton(
             text: 'XÁC NHẬN CHIA SẺ',
-            icon: Icons.share,
-            backgroundColor: AppColors.primaryAccent,
-            textColor: AppColors.primaryInk,
+            icon: Icons.share_rounded,
+            backgroundColor: AppColors.royalCobalt,
+            textColor: Colors.white,
             isLoading: _isLoading,
             onPressed: _submitShare,
           ),
@@ -272,21 +291,36 @@ class _ShareModalContentState extends State<_ShareModalContent> {
     required String role,
     required String title,
     required String subtitle,
-    required Color color,
-    bool textWhite = false,
+    required Color selectedBg,
+    required Color selectedBorder,
+    required Color textColor,
   }) {
     final isSelected = _selectedRole == role;
 
     return GestureDetector(
       onTap: () => setState(() => _selectedRole = role),
-      child: BrutalistCard(
-        backgroundColor: isSelected ? color : AppColors.cardWhite,
+      child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? selectedBg : AppColors.cardWhite,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? selectedBorder : AppColors.softIceBlue,
+            width: isSelected ? 1.5 : 1.0,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0603040B),
+              offset: Offset(0, 2),
+              blurRadius: 6,
+            ),
+          ],
+        ),
         child: Row(
           children: [
             Icon(
               isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
-              color: isSelected && textWhite ? Colors.white : AppColors.primaryInk,
+              color: isSelected ? textColor : AppColors.slateSteel,
               size: 20,
             ),
             const SizedBox(width: 12),
@@ -297,9 +331,9 @@ class _ShareModalContentState extends State<_ShareModalContent> {
                   Text(
                     title,
                     style: GoogleFonts.spaceGrotesk(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      color: isSelected && textWhite ? Colors.white : AppColors.primaryInk,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? textColor : AppColors.obsidianDark,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -307,10 +341,8 @@ class _ShareModalContentState extends State<_ShareModalContent> {
                     subtitle,
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: isSelected && textWhite
-                          ? Colors.white.withValues(alpha: 0.9)
-                          : AppColors.secondaryText,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.slateSteel,
                     ),
                   ),
                 ],

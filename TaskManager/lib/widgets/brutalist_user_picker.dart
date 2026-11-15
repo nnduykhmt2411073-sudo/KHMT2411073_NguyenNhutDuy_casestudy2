@@ -4,7 +4,6 @@ import '../models/user.dart';
 import '../services/user_service.dart';
 import '../utils/app_colors.dart';
 import 'brutalist_button.dart';
-import 'brutalist_card.dart';
 import 'brutalist_avatar.dart';
 
 class BrutalistUserPicker {
@@ -220,13 +219,13 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                 hintText: 'Nhập email hoặc họ tên để tìm...',
                 hintStyle: GoogleFonts.inter(
                   fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.secondaryText,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.slateSteel,
                 ),
-                prefixIcon: const Icon(Icons.search, color: AppColors.primaryInk),
+                prefixIcon: const Icon(Icons.search_rounded, color: AppColors.slateSteel),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear, color: AppColors.primaryInk),
+                        icon: const Icon(Icons.clear_rounded, color: AppColors.slateSteel),
                         onPressed: () {
                           _searchController.clear();
                           _loadInitialUsers();
@@ -245,15 +244,15 @@ class _UserPickerModalState extends State<_UserPickerModal> {
             child: _isLoading
                 ? const Center(
                     child: CircularProgressIndicator(
-                      color: AppColors.primaryInk,
-                      strokeWidth: 3,
+                      color: AppColors.royalCobalt,
+                      strokeWidth: 2.5,
                     ),
                   )
                 : _errorMessage != null
                     ? Center(
                         child: Text(
                           _errorMessage!,
-                          style: GoogleFonts.inter(color: AppColors.danger),
+                          style: GoogleFonts.inter(color: AppColors.terracottaAlert),
                         ),
                       )
                     : _users.isEmpty
@@ -261,14 +260,14 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.person_search, size: 48, color: AppColors.secondaryText),
+                                const Icon(Icons.person_search, size: 48, color: AppColors.slateSteel),
                                 const SizedBox(height: 10),
                                 Text(
                                   'KHÔNG TÌM THẤY NGƯỜI DÙNG',
                                   style: GoogleFonts.spaceGrotesk(
                                     fontSize: 15,
-                                    fontWeight: FontWeight.w800,
-                                    color: AppColors.primaryInk,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.obsidianDark,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
@@ -277,7 +276,7 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
-                                    color: AppColors.secondaryText,
+                                    color: AppColors.slateSteel,
                                   ),
                                 ),
                               ],
@@ -292,10 +291,26 @@ class _UserPickerModalState extends State<_UserPickerModal> {
 
                               return GestureDetector(
                                 onTap: () => _toggleUser(user),
-                                child: BrutalistCard(
-                                  backgroundColor: isSelected
-                                      ? AppColors.primaryAccent
-                                      : AppColors.cardWhite,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? const Color(0xFFEFF6FF)
+                                        : AppColors.cardWhite,
+                                    borderRadius: BorderRadius.circular(14),
+                                    border: Border.all(
+                                      color: isSelected
+                                          ? AppColors.royalCobalt
+                                          : AppColors.softIceBlue,
+                                      width: isSelected ? 1.5 : 1.0,
+                                    ),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Color(0x0603040B),
+                                        offset: Offset(0, 2),
+                                        blurRadius: 6,
+                                      ),
+                                    ],
+                                  ),
                                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                                   child: Row(
                                     children: [
@@ -305,8 +320,8 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                                         name: user.fullName,
                                         size: 36,
                                         backgroundColor: isSelected
-                                            ? AppColors.cardWhite
-                                            : AppColors.secondarySurface,
+                                            ? AppColors.royalCobalt
+                                            : AppColors.midnightIndigo,
                                       ),
                                       const SizedBox(width: 12),
 
@@ -319,16 +334,16 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                                               user.fullName,
                                               style: GoogleFonts.spaceGrotesk(
                                                 fontSize: 14,
-                                                fontWeight: FontWeight.w800,
-                                                color: AppColors.primaryInk,
+                                                fontWeight: FontWeight.w700,
+                                                color: AppColors.obsidianDark,
                                               ),
                                             ),
                                             Text(
                                               user.email,
                                               style: GoogleFonts.inter(
                                                 fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                                color: AppColors.secondaryText,
+                                                fontWeight: FontWeight.w400,
+                                                color: AppColors.slateSteel,
                                               ),
                                             ),
                                           ],

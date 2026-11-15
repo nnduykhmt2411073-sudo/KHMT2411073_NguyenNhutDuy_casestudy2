@@ -145,15 +145,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
         content: Text(
           message,
           style: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),
-        backgroundColor: AppColors.primaryInk,
+        backgroundColor: AppColors.royalCobalt,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(color: AppColors.primaryInk, width: 2),
+          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );
@@ -162,39 +161,44 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget _buildTypeBadge(String type) {
     switch (type) {
       case 'task_assigned':
-        return BrutalistBadge(
+        return const BrutalistBadge(
           text: 'PHÂN CÔNG',
-          backgroundColor: AppColors.primaryAccent,
-          textColor: AppColors.primaryInk,
-          icon: Icons.person_add_alt_1,
+          backgroundColor: Color(0xFFEFF6FF),
+          textColor: AppColors.royalCobalt,
+          borderColor: Color(0xFFBFDBFE),
+          icon: Icons.person_add_alt_1_rounded,
         );
       case 'task_shared':
-        return BrutalistBadge(
+        return const BrutalistBadge(
           text: 'CHIA SẺ',
-          backgroundColor: AppColors.primaryInk,
-          textColor: Colors.white,
-          icon: Icons.share,
+          backgroundColor: Color(0xFFEFF6FF),
+          textColor: AppColors.royalCobalt,
+          borderColor: Color(0xFFBFDBFE),
+          icon: Icons.share_rounded,
         );
       case 'task_status_changed':
-        return BrutalistBadge(
+        return const BrutalistBadge(
           text: 'TRẠNG THÁI',
-          backgroundColor: AppColors.secondarySurface,
-          textColor: AppColors.primaryInk,
-          icon: Icons.sync_alt,
+          backgroundColor: Color(0xFFEDFBF2),
+          textColor: AppColors.successMint,
+          borderColor: Color(0xFFBBF7D0),
+          icon: Icons.sync_rounded,
         );
       case 'task_reminder':
-        return BrutalistBadge(
+        return const BrutalistBadge(
           text: 'HẠN CHÓT',
-          backgroundColor: AppColors.danger,
-          textColor: Colors.white,
-          icon: Icons.alarm,
+          backgroundColor: AppColors.terracottaAlertLight,
+          textColor: AppColors.terracottaAlert,
+          borderColor: AppColors.terracottaAlertBorder,
+          icon: Icons.alarm_rounded,
         );
       default:
-        return BrutalistBadge(
+        return const BrutalistBadge(
           text: 'HỆ THỐNG',
-          backgroundColor: AppColors.cardWhite,
-          textColor: AppColors.primaryInk,
-          icon: Icons.notifications,
+          backgroundColor: Color(0xFFF8FAFC),
+          textColor: AppColors.slateSteel,
+          borderColor: AppColors.softIceBlue,
+          icon: Icons.notifications_none_rounded,
         );
     }
   }
@@ -202,50 +206,45 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
         title: Text(
           'THÔNG BÁO // ALERTS',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+            color: AppColors.obsidianDark,
           ),
         ),
         actions: [
           if (_unreadCount > 0)
             Padding(
-              padding: const EdgeInsets.only(right: 8.0),
+              padding: const EdgeInsets.only(right: 14.0),
               child: TextButton.icon(
                 onPressed: _markAllAsRead,
-                icon: const Icon(Icons.done_all, size: 18, color: AppColors.primaryInk),
+                icon: const Icon(Icons.done_all_rounded, size: 16, color: AppColors.royalCobalt),
                 label: Text(
                   'ĐỌC HẾT',
                   style: GoogleFonts.spaceGrotesk(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.primaryInk,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.royalCobalt,
                   ),
                 ),
                 style: TextButton.styleFrom(
-                  backgroundColor: AppColors.primaryAccent,
+                  backgroundColor: AppColors.cardWhite,
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                    side: const BorderSide(color: AppColors.primaryInk, width: 1.5),
+                    borderRadius: BorderRadius.circular(10),
+                    side: const BorderSide(color: AppColors.softIceBlue, width: 1.0),
                   ),
                 ),
               ),
             ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
-          ),
-        ),
       ),
       body: Column(
         children: [
@@ -255,7 +254,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             decoration: const BoxDecoration(
               color: AppColors.cardWhite,
               border: Border(
-                bottom: BorderSide(color: AppColors.primaryInk, width: 2),
+                bottom: BorderSide(color: AppColors.softIceBlue, width: 1.0),
               ),
             ),
             child: Row(
@@ -356,7 +355,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Expanded(
             child: _isLoading
                 ? const Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryInk),
+                    child: CircularProgressIndicator(
+                      color: AppColors.royalCobalt,
+                      strokeWidth: 2.5,
+                    ),
                   )
                 : _errorMessage != null
                     ? Center(
@@ -367,14 +369,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.error_outline,
-                                    color: AppColors.danger, size: 48),
+                                const Icon(Icons.error_outline_rounded,
+                                    color: AppColors.terracottaAlert, size: 48),
                                 const SizedBox(height: 12),
                                 Text(
                                   'LỖI KẾT NỐI',
                                   style: GoogleFonts.spaceGrotesk(
                                     fontSize: 18,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.obsidianDark,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
@@ -382,14 +385,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   _errorMessage!,
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    color: AppColors.secondaryText,
+                                    fontSize: 13,
+                                    color: AppColors.slateSteel,
                                   ),
                                 ),
                                 const SizedBox(height: 16),
                                 BrutalistButton(
                                   text: 'THỬ LẠI',
-                                  icon: Icons.refresh,
+                                  icon: Icons.refresh_rounded,
+                                  backgroundColor: AppColors.royalCobalt,
+                                  textColor: Colors.white,
                                   onPressed: _fetchNotifications,
                                 ),
                               ],
@@ -399,8 +404,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       )
                     : _notifications.isEmpty
                         ? RefreshIndicator(
-                            color: AppColors.primaryInk,
-                            backgroundColor: AppColors.primaryAccent,
+                            color: AppColors.royalCobalt,
+                            backgroundColor: Colors.white,
                             onRefresh: _fetchNotifications,
                             child: ListView(
                               physics: const AlwaysScrollableScrollPhysics(),
@@ -409,25 +414,35 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 Center(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                                    child: BrutalistCard(
-                                      backgroundColor: AppColors.cardWhite,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(32),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.cardWhite,
+                                        borderRadius: BorderRadius.circular(24),
+                                        border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color(0x0603040B),
+                                            offset: Offset(0, 4),
+                                            blurRadius: 14,
+                                          ),
+                                        ],
+                                      ),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Container(
-                                            padding: const EdgeInsets.all(16),
+                                            width: 64,
+                                            height: 64,
                                             decoration: BoxDecoration(
-                                              color: AppColors.primaryAccent,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: AppColors.primaryInk,
-                                                width: 2,
-                                              ),
+                                              color: const Color(0xFFEFF6FF),
+                                              borderRadius: BorderRadius.circular(20),
+                                              border: Border.all(color: const Color(0xFFBFDBFE), width: 1.0),
                                             ),
                                             child: const Icon(
                                               Icons.notifications_off_outlined,
-                                              size: 36,
-                                              color: AppColors.primaryInk,
+                                              size: 30,
+                                              color: AppColors.royalCobalt,
                                             ),
                                           ),
                                           const SizedBox(height: 16),
@@ -437,8 +452,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 : 'HỘP THƯ THÔNG BÁO TRỐNG',
                                             style: GoogleFonts.spaceGrotesk(
                                               fontSize: 16,
-                                              fontWeight: FontWeight.w900,
-                                              color: AppColors.primaryInk,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.obsidianDark,
                                             ),
                                           ),
                                           const SizedBox(height: 8),
@@ -447,7 +462,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             textAlign: TextAlign.center,
                                             style: GoogleFonts.inter(
                                               fontSize: 13,
-                                              color: AppColors.secondaryText,
+                                              fontWeight: FontWeight.w400,
+                                              color: AppColors.slateSteel,
                                             ),
                                           ),
                                         ],
@@ -459,8 +475,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             ),
                           )
                         : RefreshIndicator(
-                            color: AppColors.primaryInk,
-                            backgroundColor: AppColors.primaryAccent,
+                            color: AppColors.royalCobalt,
+                            backgroundColor: Colors.white,
                             onRefresh: _fetchNotifications,
                             child: ListView.builder(
                               physics: const AlwaysScrollableScrollPhysics(),
@@ -473,19 +489,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         item.taskIdString!.isNotEmpty);
 
                                 return Padding(
-                                  padding: const EdgeInsets.only(bottom: 14.0),
+                                  padding: const EdgeInsets.only(bottom: 12.0),
                                   child: InkWell(
                                     onTap: () => _onNotificationTap(item),
                                     child: Container(
                                       decoration: BoxDecoration(
                                         color: item.isRead
                                             ? AppColors.cardWhite
-                                            : const Color(0xFFF7FAFD),
-                                        borderRadius: BorderRadius.circular(14),
+                                            : const Color(0xFFF8FAFC),
+                                        borderRadius: BorderRadius.circular(16),
                                         border: Border.all(
                                           color: item.isRead
                                               ? AppColors.softIceBlue
-                                              : const Color(0xFF90CDF4),
+                                              : const Color(0xFFBFDBFE),
                                           width: 1.0,
                                         ),
                                         boxShadow: const [
@@ -505,12 +521,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                               left: 0,
                                               bottom: 0,
                                               child: Container(
-                                                width: 6,
+                                                width: 4,
                                                 decoration: const BoxDecoration(
-                                                  color: AppColors.primaryAccent,
+                                                  color: AppColors.royalCobalt,
                                                   borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    bottomLeft: Radius.circular(8),
+                                                    topLeft: Radius.circular(16),
+                                                    bottomLeft: Radius.circular(16),
                                                   ),
                                                 ),
                                               ),
@@ -536,8 +552,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                           .format(item.createdAt.toLocal()),
                                                       style: GoogleFonts.jetBrainsMono(
                                                         fontSize: 11,
-                                                        fontWeight: FontWeight.w700,
-                                                        color: AppColors.secondaryText,
+                                                        fontWeight: FontWeight.w600,
+                                                        color: AppColors.slateSteel,
                                                       ),
                                                     ),
                                                     const SizedBox(width: 8),
@@ -549,14 +565,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                           color: AppColors.cardWhite,
                                                           shape: BoxShape.circle,
                                                           border: Border.all(
-                                                            color: AppColors.primaryInk,
-                                                            width: 1.2,
+                                                            color: AppColors.softIceBlue,
+                                                            width: 1.0,
                                                           ),
                                                         ),
                                                         child: const Icon(
-                                                          Icons.close,
+                                                          Icons.close_rounded,
                                                           size: 14,
-                                                          color: AppColors.primaryInk,
+                                                          color: AppColors.slateSteel,
                                                         ),
                                                       ),
                                                     ),
@@ -569,9 +585,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   item.title,
                                                   style: GoogleFonts.spaceGrotesk(
                                                     fontSize: 14,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: AppColors.primaryInk,
-                                                    letterSpacing: -0.3,
+                                                    fontWeight: FontWeight.w700,
+                                                    color: AppColors.obsidianDark,
+                                                    letterSpacing: -0.2,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 6),
@@ -581,9 +597,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                   item.message,
                                                   style: GoogleFonts.inter(
                                                     fontSize: 13,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: AppColors.primaryInk,
-                                                    height: 1.35,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: AppColors.slateSteel,
+                                                    height: 1.4,
                                                   ),
                                                 ),
 
@@ -596,6 +612,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                         avatarUrl: item.sender!.avatarUrl,
                                                         name: item.sender!.fullName,
                                                         size: 20,
+                                                        backgroundColor: AppColors.midnightIndigo,
                                                       ),
                                                       const SizedBox(width: 6),
                                                       Text(
@@ -603,7 +620,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                         style: GoogleFonts.jetBrainsMono(
                                                           fontSize: 11,
                                                           fontWeight: FontWeight.w600,
-                                                          color: AppColors.secondaryText,
+                                                          color: AppColors.slateSteel,
                                                         ),
                                                       ),
                                                     ],
@@ -619,30 +636,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                       vertical: 6,
                                                     ),
                                                     decoration: BoxDecoration(
-                                                      color: AppColors.scaffoldBackground,
-                                                      borderRadius:
-                                                          BorderRadius.circular(6),
+                                                      color: const Color(0xFFEFF6FF),
+                                                      borderRadius: BorderRadius.circular(10),
                                                       border: Border.all(
-                                                        color: AppColors.primaryInk,
-                                                        width: 1.5,
+                                                        color: const Color(0xFFBFDBFE),
+                                                        width: 0.8,
                                                       ),
                                                     ),
                                                     child: Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
                                                         const Icon(
-                                                          Icons.arrow_forward,
-                                                          size: 14,
-                                                          color: AppColors.primaryInk,
+                                                          Icons.arrow_forward_rounded,
+                                                          size: 13,
+                                                          color: AppColors.royalCobalt,
                                                         ),
                                                         const SizedBox(width: 6),
                                                         Text(
                                                           'XEM CÔNG VIỆC LIÊN QUAN',
-                                                          style: GoogleFonts.spaceGrotesk(
-                                                            fontSize: 11,
-                                                            fontWeight: FontWeight.w900,
-                                                            color: AppColors.primaryInk,
-                                                            letterSpacing: 0.5,
+                                                          style: GoogleFonts.jetBrainsMono(
+                                                            fontSize: 10,
+                                                            fontWeight: FontWeight.w700,
+                                                            color: AppColors.royalCobalt,
                                                           ),
                                                         ),
                                                       ],

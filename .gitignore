@@ -1,0 +1,26 @@
+# Dependency directories
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Environment variables
+api/.env
+api/*.log
+api/server_out.log
+api/server_err.log
+
+# Flutter & Dart
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+
+# IDE files
+**/.idea/
+**/.vscode/
+**/*.iml
+.DS_Store
+Thumbs.db

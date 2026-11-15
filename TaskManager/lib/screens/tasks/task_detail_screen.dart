@@ -1,0 +1,1230 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+import '../../models/task.dart';
+import '../../models/task_activity.dart';
+import '../../models/user.dart';
+import '../../services/auth_service.dart';
+import '../../services/task_service.dart';
+import '../../utils/app_colors.dart';
+import '../../utils/date_formatter.dart';
+import '../../widgets/brutalist_badge.dart';
+import '../../widgets/brutalist_button.dart';
+import '../../widgets/brutalist_card.dart';
+import '../../widgets/brutalist_avatar.dart';
+import '../../widgets/quick_status_bottom_sheet.dart';
+import 'task_edit_screen.dart';
+import '../../widgets/brutalist_user_picker.dart';
+import '../../widgets/brutalist_share_modal.dart';
+import '../../widgets/brutalist_manage_members_modal.dart';
+
+class TaskDetailScreen extends StatefulWidget {
+  final String taskId;
+  final Task? initialTask;
+
+  const TaskDetailScreen({
+    super.key,
+    required this.taskId,
+    this.initialTask,
+  });
+
+  @override
+  State<TaskDetailScreen> createState() => _TaskDetailScreenState();
+}
+
+class _TaskDetailScreenState extends State<TaskDetailScreen> {
+  final _taskService = TaskService();
+  final _authService = AuthService();
+
+  Task? _task;
+  User? _currentUser;
+  List<TaskActivity> _activities = [];
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _task = widget.initialTask;
+    _fetchTaskDetails();
+  }
+
+  Future<void> _fetchTaskDetails() async {
+    setState(() {
+      _isLoading = _task == null;
+      _errorMessage = null;
+    });
+
+    try {
+      final results = await Future.wait([
+        _taskService.getTaskById(widget.taskId),
+        _authService.getCurrentUser(),
+        _taskService.getTaskActivities(widget.taskId).catchError((_) => <TaskActivity>[]),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _task = results[0] as Task;
+          _currentUser = results[1] as User?;
+          _activities = results[2] as List<TaskActivity>;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = e.toString().replaceAll('Exception: ', '');
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  bool get _isCreator => _task?.createdBy?.id == _currentUser?.id;
+  bool get _isAdmin => _isCreator || _task?.sharedWith.any((m) => m.user.id == _currentUser?.id && m.role == 'admin') == true;
+  bool get _isEditor => _isAdmin || _task?.sharedWith.any((m) => m.user.id == _currentUser?.id && m.role == 'editor') == true;
+  bool get _isViewer => _task?.sharedWith.any((m) => m.user.id == _currentUser?.id && m.role == 'viewer') == true;
+  bool get _canEdit => _isAdmin || _isEditor || _task?.primaryAssignee?.id == _currentUser?.id;
+  bool get _canDelete => _isCreator || _isAdmin;
+
+  Future<void> _openManageMembers() async {
+    if (_task == null) return;
+    final updated = await BrutalistManageMembersModal.show(context: context, task: _task!);
+    if (updated != null && mounted) {
+      setState(() => _task = updated);
+    }
+  }
+
+  Future<void> _openShareModal() async {
+    if (_task == null) return;
+    final updated = await BrutalistShareModal.show(context: context, task: _task!);
+    if (updated != null && mounted) {
+      setState(() => _task = updated);
+    }
+  }
+
+  void _showDeleteConfirmDialog() {
+    if (_task == null) return;
+
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.cardWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(color: AppColors.primaryInk, width: 2),
+        ),
+        title: Text(
+          'XÁC NHẬN XÓA CÔNG VIỆC',
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 18,
+            fontWeight: FontWeight.w900,
+            color: AppColors.danger,
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'CẢNH BÁO: Hành động này không thể hoàn tác.',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                color: AppColors.danger,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Công việc "${_task!.title}" sẽ bị xóa vĩnh viễn khỏi cơ sở dữ liệu hệ thống.',
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: AppColors.secondaryText,
+                height: 1.4,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              'HỦY BỎ',
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                color: AppColors.secondaryText,
+              ),
+            ),
+          ),
+          BrutalistButton(
+            text: 'XÓA VĨNH VIỄN',
+            icon: Icons.delete_forever,
+            backgroundColor: AppColors.danger,
+            textColor: Colors.white,
+            height: 42,
+            onPressed: () async {
+              Navigator.of(ctx).pop(); // Đóng dialog
+
+              try {
+                await _taskService.deleteTask(_task!.id);
+                if (!mounted) return;
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'ĐÃ XÓA CÔNG VIỆC THÀNH CÔNG',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                    backgroundColor: AppColors.primaryInk,
+                  ),
+                );
+
+                Navigator.of(context).pop(true); // Trở về danh sách và báo refresh
+              } catch (e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'LỖI XÓA CÔNG VIỆC: ${e.toString().replaceAll('Exception: ', '')}',
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                    ),
+                    backgroundColor: AppColors.danger,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _reassignStaff() async {
+    if (_task == null) return;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => Container(
+        decoration: BoxDecoration(
+          color: AppColors.scaffoldBackground,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          border: const Border(
+            top: BorderSide(color: AppColors.primaryInk, width: 3),
+            left: BorderSide(color: AppColors.primaryInk, width: 2),
+            right: BorderSide(color: AppColors.primaryInk, width: 2),
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: AppColors.primaryInk,
+              offset: Offset(0, -3),
+              blurRadius: 0,
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 48,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: AppColors.primaryInk,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'PHÂN CÔNG NHÂN SỰ // C2',
+              style: GoogleFonts.spaceGrotesk(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                color: AppColors.primaryInk,
+              ),
+            ),
+            const SizedBox(height: 14),
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(ctx).pop();
+                final picked = await BrutalistUserPicker.show(
+                  context: context,
+                  title: 'ĐỔI NGƯỜI PHỤ TRÁCH CHÍNH',
+                  isMultiSelect: false,
+                  initialSelected: _task!.primaryAssignee != null ? [_task!.primaryAssignee!] : [],
+                );
+                if (picked != null && picked.isNotEmpty) {
+                  try {
+                    final updated = await _taskService.assignTask(
+                      _task!.id,
+                      primaryAssigneeId: picked.first.id,
+                    );
+                    if (mounted) {
+                      setState(() => _task = updated);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('ĐÃ CẬP NHẬT NGƯỜI PHỤ TRÁCH CHÍNH'),
+                          backgroundColor: AppColors.primaryInk,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Lỗi: '), backgroundColor: AppColors.danger),
+                      );
+                    }
+                  }
+                }
+              },
+              child: BrutalistCard(
+                backgroundColor: AppColors.cardWhite,
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    const Icon(Icons.star, color: AppColors.primaryAccent),
+                    const SizedBox(width: 12),
+                    Text(
+                      'ĐỔI NGƯỜI PHỤ TRÁCH CHÍNH',
+                      style: GoogleFonts.spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            GestureDetector(
+              onTap: () async {
+                Navigator.of(ctx).pop();
+                final picked = await BrutalistUserPicker.show(
+                  context: context,
+                  title: 'CHỌN THÀNH VIÊN THAM GIA',
+                  isMultiSelect: true,
+                  initialSelected: _task!.assignees,
+                );
+                if (picked != null) {
+                  try {
+                    final updated = await _taskService.assignTask(
+                      _task!.id,
+                      assigneeIds: picked.map((u) => u.id).toList(),
+                    );
+                    if (mounted) {
+                      setState(() => _task = updated);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('ĐÃ CẬP NHẬT DANH SÁCH THÀNH VIÊN'),
+                          backgroundColor: AppColors.primaryInk,
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Lỗi: '), backgroundColor: AppColors.danger),
+                      );
+                    }
+                  }
+                }
+              },
+              child: BrutalistCard(
+                backgroundColor: AppColors.cardWhite,
+                padding: const EdgeInsets.all(14),
+                child: Row(
+                  children: [
+                    const Icon(Icons.group_add, color: AppColors.primaryInk),
+                    const SizedBox(width: 12),
+                    Text(
+                      'CẬP NHẬT THÀNH VIÊN THAM GIA',
+                      style: GoogleFonts.spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w800),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _openQuickStatus() {
+    if (_task == null) return;
+    QuickStatusBottomSheet.show(
+      context: context,
+      task: _task!,
+      onUpdated: (updated) {
+        setState(() {
+          _task = updated;
+        });
+      },
+    );
+  }
+
+  Future<void> _openEditTask() async {
+    if (_task == null) return;
+    final updated = await Navigator.push<Task>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => TaskEditScreen(task: _task!),
+      ),
+    );
+    if (updated != null && mounted) {
+      setState(() {
+        _task = updated;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final task = _task;
+
+    return Scaffold(
+      backgroundColor: AppColors.scaffoldBackground,
+      appBar: AppBar(
+        title: Text(
+          'CHI TIẾT CÔNG VIỆC // B3',
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 16,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
+            color: AppColors.primaryInk,
+          ),
+        ),
+        actions: [
+          if (_isCreator)
+            IconButton(
+              icon: const Icon(Icons.delete_outline, color: AppColors.danger),
+              tooltip: 'Xóa công việc',
+              onPressed: _showDeleteConfirmDialog,
+            ),
+          IconButton(
+            icon: const Icon(Icons.edit, color: AppColors.primaryInk),
+            tooltip: 'Chỉnh sửa',
+            onPressed: _openEditTask,
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh, color: AppColors.primaryInk),
+            tooltip: 'Tải lại',
+            onPressed: _fetchTaskDetails,
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(2),
+          child: Container(
+            color: AppColors.primaryInk,
+            height: 2,
+          ),
+        ),
+      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.primaryInk,
+                strokeWidth: 3,
+              ),
+            )
+          : _errorMessage != null && task == null
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: BrutalistCard(
+                      backgroundColor: AppColors.cardWhite,
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.error_outline, size: 40, color: AppColors.danger),
+                          const SizedBox(height: 12),
+                          Text(
+                            'LỖI TẢI DỮ LIỆU',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.primaryInk,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            _errorMessage!,
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: AppColors.secondaryText,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          BrutalistButton(
+                            text: 'THỬ LẠI',
+                            icon: Icons.refresh,
+                            backgroundColor: AppColors.primaryAccent,
+                            textColor: AppColors.primaryInk,
+                            onPressed: _fetchTaskDetails,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              : task == null
+                  ? const SizedBox.shrink()
+                  : RefreshIndicator(
+                      color: AppColors.primaryInk,
+                      backgroundColor: AppColors.primaryAccent,
+                      onRefresh: _fetchTaskDetails,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Header Tag Row
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                BrutalistBadge(
+                                  text: 'TASK ID: #${task.id.length > 8 ? task.id.substring(task.id.length - 8).toUpperCase() : task.id.toUpperCase()}',
+                                  backgroundColor: AppColors.secondarySurface,
+                                  textColor: AppColors.primaryInk,
+                                ),
+                                _buildStatusBadge(task.status),
+                              ],
+                            ),
+                            Row(children: [_buildRoleBadge()]),
+                            const SizedBox(height: 14),
+
+                            // Main Title Card
+                            BrutalistCard(
+                              padding: const EdgeInsets.all(20.0),
+                              backgroundColor: AppColors.cardWhite,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          task.title,
+                                          style: GoogleFonts.spaceGrotesk(
+                                            fontSize: 22,
+                                            fontWeight: FontWeight.w900,
+                                            color: AppColors.primaryInk,
+                                            height: 1.25,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 14),
+                                  Row(
+                                    children: [
+                                      _buildPriorityBadge(task.priority),
+                                      const SizedBox(width: 8),
+                                      if (task.createdAt != null)
+                                        Text(
+                                          'TẠO NGÀY: ${DateFormat('dd/MM/yyyy HH:mm').format(task.createdAt!)}',
+                                          style: GoogleFonts.jetBrainsMono(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.secondaryText,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Description Section
+                            BrutalistCard(
+                              padding: const EdgeInsets.all(20.0),
+                              backgroundColor: AppColors.cardWhite,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.description_outlined, size: 18, color: AppColors.primaryInk),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'MÔ TẢ CÔNG VIỆC',
+                                        style: GoogleFonts.spaceGrotesk(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w900,
+                                          letterSpacing: 0.5,
+                                          color: AppColors.primaryInk,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Container(
+                                    height: 1.5,
+                                    color: AppColors.divider.withValues(alpha: 0.5),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    task.description.trim().isNotEmpty
+                                        ? task.description.trim()
+                                        : 'Không có nội dung mô tả chi tiết cho công việc này.',
+                                    style: GoogleFonts.inter(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: task.description.trim().isNotEmpty
+                                          ? AppColors.primaryInk
+                                          : AppColors.secondaryText,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Timeline & Deadline Card
+                            _buildTimelineCard(task),
+                            const SizedBox(height: 16),
+
+                            // People Involved (CreatedBy & Assignees)
+                            _buildPeopleCard(task),
+                            const SizedBox(height: 16),
+
+                            // Activity History Section
+                            _buildActivityHistoryCard(),
+                            const SizedBox(height: 20),
+
+                            // Action Buttons (B4 & C3 RBAC)
+                            if (_canEdit) ...[
+                            BrutalistButton(
+                              text: 'CHUYỂN TRẠNG THÁI NHANH',
+                              icon: Icons.sync,
+                              backgroundColor: AppColors.primaryAccent,
+                              textColor: AppColors.primaryInk,
+                              onPressed: _openQuickStatus,
+                            ),
+                                                        if (_isAdmin) ...[
+                              const SizedBox(height: 12),
+                              BrutalistButton(
+                                text: 'QUẢN LÝ THÀNH VIÊN (C4)',
+                                icon: Icons.manage_accounts,
+                                backgroundColor: AppColors.secondarySurface,
+                                textColor: AppColors.primaryInk,
+                                onPressed: _openManageMembers,
+                              ),
+                            ],
+                            if (_isAdmin) ...[
+                              const SizedBox(height: 12),
+                              BrutalistButton(
+                                text: 'CHIA SẺ CÔNG VIỆC (C3 - RBAC)',
+                                icon: Icons.share,
+                                backgroundColor: AppColors.cardWhite,
+                                textColor: AppColors.primaryInk,
+                                onPressed: _openShareModal,
+                              ),
+                            ],
+                            if (_isAdmin) ...[
+                              const SizedBox(height: 12),
+                              BrutalistButton(
+                                text: 'PHÂN CÔNG NHÂN SỰ (C2)',
+                                icon: Icons.person_add_alt_1,
+                                backgroundColor: AppColors.primaryAccent,
+                                textColor: AppColors.primaryInk,
+                                onPressed: _reassignStaff,
+                              ),
+                            ],
+                            const SizedBox(height: 12),
+                            BrutalistButton(
+                              text: 'CHỈNH SỬA CÔNG VIỆC',
+                              icon: Icons.edit_note,
+                              backgroundColor: AppColors.cardWhite,
+                              textColor: AppColors.primaryInk,
+                              onPressed: _openEditTask,
+                            ),
+                            ],
+                            if (_canDelete) ...[
+                              const SizedBox(height: 12),
+                              BrutalistButton(
+                                text: 'XÓA CÔNG VIỆC (B5)',
+                                icon: Icons.delete_forever,
+                                backgroundColor: AppColors.danger,
+                                textColor: Colors.white,
+                                onPressed: _showDeleteConfirmDialog,
+                              ),
+                            ],
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                      ),
+                    ),
+    );
+  }
+
+  Widget _buildRoleBadge() {
+    String text = 'THÀNH VIÊN';
+    Color bg = AppColors.secondarySurface;
+    Color tc = AppColors.primaryInk;
+
+    if (_isCreator) {
+      text = 'CHỦ SỞ HỮU (OWNER)';
+      bg = AppColors.primaryAccent;
+    } else if (_isAdmin) {
+      text = 'QUẢN TRỊ VIÊN (ADMIN)';
+      bg = AppColors.danger;
+      tc = Colors.white;
+    } else if (_isEditor) {
+      text = 'NGƯỜI CHỈNH SỬA (EDITOR)';
+      bg = AppColors.primaryAccent;
+    } else if (_isViewer) {
+      text = 'NGƯỜI XEM (VIEWER)';
+      bg = AppColors.secondarySurface;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: bg,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: AppColors.primaryInk, width: 1.5),
+      ),
+      child: Text(
+        text,
+        style: GoogleFonts.jetBrainsMono(
+          fontSize: 9,
+          fontWeight: FontWeight.w900,
+          color: tc,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimelineCard(Task task) {
+    final now = DateTime.now();
+    final isOverdue = task.dueDate != null &&
+        task.dueDate!.isBefore(now) &&
+        task.status != 'completed';
+
+    return BrutalistCard(
+      padding: const EdgeInsets.all(20.0),
+      backgroundColor: AppColors.cardWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.access_time_filled, size: 18, color: AppColors.primaryInk),
+              const SizedBox(width: 8),
+              Text(
+                'TIẾN ĐỘ THỜI GIAN',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                  color: AppColors.primaryInk,
+                ),
+              ),
+              const Spacer(),
+              if (isOverdue)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: AppColors.danger,
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                  ),
+                  child: Text(
+                    'ĐÃ QUÁ HẠN',
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(
+            height: 1.5,
+            color: AppColors.divider.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 14),
+
+          // Start Date & Due Date rows
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'NGÀY BẮT ĐẦU',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.secondaryText,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      task.startDate != null
+                          ? DateFormat('dd/MM/yyyy').format(task.startDate!)
+                          : 'CHƯA ĐẶT',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primaryInk,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(width: 1.5, height: 40, color: AppColors.divider.withValues(alpha: 0.5)),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'HẠN HOÀN THÀNH',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w800,
+                        color: isOverdue ? AppColors.danger : AppColors.secondaryText,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      task.dueDate != null
+                          ? DateFormat('dd/MM/yyyy').format(task.dueDate!)
+                          : 'KHÔNG CÓ HẠN',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                        color: isOverdue ? AppColors.danger : AppColors.primaryInk,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPeopleCard(Task task) {
+    return BrutalistCard(
+      padding: const EdgeInsets.all(20.0),
+      backgroundColor: AppColors.cardWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.people_alt_outlined, size: 18, color: AppColors.primaryInk),
+              const SizedBox(width: 8),
+              Text(
+                'NHÂN SỰ PHỤ TRÁCH',
+                style: GoogleFonts.spaceGrotesk(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.5,
+                  color: AppColors.primaryInk,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Container(
+            height: 1.5,
+            color: AppColors.divider.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 14),
+
+          // Người tạo
+          Text(
+            'NGƯỜI TẠO CÔNG VIỆC',
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 6),
+          _buildUserTile(task.createdBy, isCreator: true),
+
+          const SizedBox(height: 16),
+
+          // Người phụ trách chính
+          Text(
+            'NGƯỜI PHỤ TRÁCH CHÍNH',
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.secondaryText,
+            ),
+          ),
+          const SizedBox(height: 6),
+          _buildUserTile(task.primaryAssignee ?? task.createdBy, isPrimary: true),
+
+          // Danh sách người được gán nếu có
+          if (task.assignees.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Text(
+              'DANH SÁCH THÀNH VIÊN GIAO VIỆC (${task.assignees.length})',
+              style: GoogleFonts.jetBrainsMono(
+                fontSize: 10,
+                fontWeight: FontWeight.w800,
+                color: AppColors.secondaryText,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: task.assignees.map((user) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.scaffoldBackground,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.person, size: 14, color: AppColors.primaryInk),
+                      const SizedBox(width: 4),
+                      Text(
+                        user.fullName,
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primaryInk,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUserTile(User? user, {bool isCreator = false, bool isPrimary = false}) {
+    final name = user?.fullName.isNotEmpty == true ? user!.fullName : 'Không rõ';
+    final email = user?.email.isNotEmpty == true ? user!.email : '---';
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColors.scaffoldBackground,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: AppColors.primaryInk, width: 1.5),
+      ),
+      child: Row(
+        children: [
+          BrutalistAvatar(
+            avatarUrl: user?.avatarUrl,
+            name: name,
+            size: 34,
+            backgroundColor: isPrimary ? AppColors.primaryAccent : AppColors.cardWhite,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  name,
+                  style: GoogleFonts.spaceGrotesk(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.primaryInk,
+                  ),
+                ),
+                Text(
+                  email,
+                  style: GoogleFonts.inter(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondaryText,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusBadge(String status) {
+    switch (status) {
+      case 'in_progress':
+        return BrutalistBadge(
+          text: 'ĐANG LÀM',
+          backgroundColor: AppColors.primaryAccent,
+          textColor: AppColors.primaryInk,
+          icon: Icons.sync,
+        );
+      case 'completed':
+        return BrutalistBadge(
+          text: 'HOÀN THÀNH',
+          backgroundColor: const Color(0xFF9AE6B4),
+          textColor: AppColors.primaryInk,
+          icon: Icons.check_circle_outline,
+        );
+      case 'cancelled':
+        return BrutalistBadge(
+          text: 'ĐÃ HỦY',
+          backgroundColor: AppColors.danger,
+          textColor: Colors.white,
+          icon: Icons.cancel_outlined,
+        );
+      case 'todo':
+      default:
+        return BrutalistBadge(
+          text: 'CHỜ XỬ LÝ',
+          backgroundColor: AppColors.secondarySurface,
+          textColor: AppColors.primaryInk,
+          icon: Icons.hourglass_empty,
+        );
+    }
+  }
+
+  Widget _buildPriorityBadge(String priority) {
+    switch (priority) {
+      case 'high':
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.danger,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: AppColors.primaryInk, width: 1.5),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.priority_high, size: 12, color: Colors.white),
+              const SizedBox(width: 2),
+              Text(
+                'ƯU TIÊN CAO',
+                style: GoogleFonts.jetBrainsMono(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        );
+      case 'medium':
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.primaryAccent,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: AppColors.primaryInk, width: 1.5),
+          ),
+          child: Text(
+            'TRUNG BÌNH',
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 10,
+              fontWeight: FontWeight.w800,
+              color: AppColors.primaryInk,
+            ),
+          ),
+        );
+      case 'low':
+      default:
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: AppColors.secondarySurface,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: AppColors.primaryInk, width: 1.5),
+          ),
+          child: Text(
+            'THẤP',
+            style: GoogleFonts.jetBrainsMono(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryInk,
+            ),
+          ),
+        );
+    }
+  }
+
+  Widget _buildActivityHistoryCard() {
+    return BrutalistCard(
+      padding: const EdgeInsets.all(20.0),
+      backgroundColor: AppColors.cardWhite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.history, size: 20, color: AppColors.primaryInk),
+                  const SizedBox(width: 8),
+                  Text(
+                    'LỊCH SỬ HOẠT ĐỘNG',
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 0.5,
+                      color: AppColors.primaryInk,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryAccent,
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                ),
+                child: Text(
+                  '${_activities.length} HOẠT ĐỘNG',
+                  style: GoogleFonts.jetBrainsMono(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.primaryInk,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Container(
+            height: 1.5,
+            color: AppColors.divider.withValues(alpha: 0.5),
+          ),
+          const SizedBox(height: 14),
+          if (_activities.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Center(
+                child: Text(
+                  'Chưa có lịch sử hoạt động cho công việc này.',
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.secondaryText,
+                  ),
+                ),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _activities.length > 5 ? 5 : _activities.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final act = _activities[index];
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.scaffoldBackground,
+                    border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppColors.primaryInk,
+                        offset: Offset(2, 2),
+                        blurRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.cardWhite,
+                              border: Border.all(color: AppColors.primaryInk, width: 1),
+                            ),
+                            child: Text(
+                              act.actionLabel,
+                              style: GoogleFonts.jetBrainsMono(
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.primaryInk,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            DateFormatter.timeAgo(act.createdAt),
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.secondaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        act.description,
+                        style: GoogleFonts.inter(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryInk,
+                        ),
+                      ),
+                      if (act.user != null && act.user!.fullName.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            BrutalistAvatar(
+                              name: act.user!.fullName,
+                              avatarUrl: act.user!.avatarUrl,
+                              size: 18,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              act.user!.fullName,
+                              style: GoogleFonts.jetBrainsMono(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.secondaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}

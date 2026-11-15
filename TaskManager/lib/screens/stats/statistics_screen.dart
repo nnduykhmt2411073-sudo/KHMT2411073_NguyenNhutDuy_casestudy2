@@ -443,29 +443,39 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryInk : AppColors.cardWhite,
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(color: AppColors.primaryInk, width: 1.8),
+          color: isSelected ? AppColors.royalCobalt : AppColors.cardWhite,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isSelected ? AppColors.royalCobalt : AppColors.softIceBlue,
+            width: 1.0,
+          ),
           boxShadow: isSelected
-              ? const [
+              ? [
                   BoxShadow(
-                    color: AppColors.primaryInk,
-                    offset: Offset(2, 2),
-                    blurRadius: 0,
+                    color: AppColors.royalCobalt.withValues(alpha: 0.25),
+                    offset: const Offset(0, 3),
+                    blurRadius: 8,
                   ),
                 ]
-              : null,
+              : const [
+                  BoxShadow(
+                    color: Color(0x0403040B),
+                    offset: Offset(0, 1),
+                    blurRadius: 4,
+                  ),
+                ],
         ),
         child: Text(
           label,
-          style: GoogleFonts.spaceGrotesk(
+          style: GoogleFonts.inter(
             fontSize: 12,
-            fontWeight: FontWeight.w800,
-            letterSpacing: 0.5,
-            color: isSelected ? Colors.white : AppColors.primaryInk,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            letterSpacing: 0.3,
+            color: isSelected ? Colors.white : AppColors.slateSteel,
           ),
         ),
       ),
@@ -482,16 +492,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     bool isAlert = false,
   }) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.primaryInk, width: 2.0),
+        color: AppColors.cardWhite,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isAlert ? const Color(0xFFF3C7C2) : AppColors.softIceBlue,
+          width: 1.0,
+        ),
         boxShadow: const [
           BoxShadow(
-            color: AppColors.primaryInk,
-            offset: Offset(3, 3),
-            blurRadius: 0,
+            color: Color(0x0603040B),
+            offset: Offset(0, 2),
+            blurRadius: 8,
           ),
         ],
       ),

@@ -273,17 +273,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
-                        color: !_onlyUnread ? AppColors.primaryInk : AppColors.cardWhite,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                        color: !_onlyUnread ? AppColors.royalCobalt : AppColors.cardWhite,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: !_onlyUnread ? AppColors.royalCobalt : AppColors.softIceBlue,
+                          width: 1.0,
+                        ),
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         'TẤT CẢ',
-                        style: GoogleFonts.spaceGrotesk(
+                        style: GoogleFonts.inter(
                           fontSize: 13,
-                          fontWeight: FontWeight.w900,
-                          color: !_onlyUnread ? Colors.white : AppColors.primaryInk,
+                          fontWeight: FontWeight.w600,
+                          color: !_onlyUnread ? Colors.white : AppColors.slateSteel,
                         ),
                       ),
                     ),
@@ -303,9 +306,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: BoxDecoration(
-                        color: _onlyUnread ? AppColors.primaryAccent : AppColors.cardWhite,
-                        borderRadius: BorderRadius.circular(6),
-                        border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                        color: _onlyUnread ? AppColors.royalCobalt : AppColors.cardWhite,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: _onlyUnread ? AppColors.royalCobalt : AppColors.softIceBlue,
+                          width: 1.0,
+                        ),
                       ),
                       alignment: Alignment.center,
                       child: Row(
@@ -313,10 +319,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         children: [
                           Text(
                             'CHƯA ĐỌC',
-                            style: GoogleFonts.spaceGrotesk(
+                            style: GoogleFonts.inter(
                               fontSize: 13,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.primaryInk,
+                              fontWeight: FontWeight.w600,
+                              color: _onlyUnread ? Colors.white : AppColors.slateSteel,
                             ),
                           ),
                           if (_unreadCount > 0) ...[
@@ -324,15 +330,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                               decoration: BoxDecoration(
-                                color: AppColors.danger,
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: AppColors.primaryInk, width: 1),
+                                color: AppColors.terracottaAlert,
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 '$_unreadCount',
                                 style: GoogleFonts.jetBrainsMono(
                                   fontSize: 11,
-                                  fontWeight: FontWeight.w900,
+                                  fontWeight: FontWeight.w700,
                                   color: Colors.white,
                                 ),
                               ),
@@ -475,21 +480,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       decoration: BoxDecoration(
                                         color: item.isRead
                                             ? AppColors.cardWhite
-                                            : const Color(0xFFFFFBEA), // Light Turmeric tint for unread
-                                        borderRadius: BorderRadius.circular(10),
+                                            : const Color(0xFFF7FAFD),
+                                        borderRadius: BorderRadius.circular(14),
                                         border: Border.all(
                                           color: item.isRead
-                                              ? AppColors.primaryInk
-                                              : AppColors.primaryInk,
-                                          width: item.isRead ? 2.0 : 2.5,
+                                              ? AppColors.softIceBlue
+                                              : const Color(0xFF90CDF4),
+                                          width: 1.0,
                                         ),
-                                        boxShadow: [
+                                        boxShadow: const [
                                           BoxShadow(
-                                            color: AppColors.primaryInk,
-                                            offset: item.isRead
-                                                ? const Offset(3, 3)
-                                                : const Offset(4, 4),
-                                            blurRadius: 0,
+                                            color: Color(0x0603040B),
+                                            offset: Offset(0, 2),
+                                            blurRadius: 8,
                                           ),
                                         ],
                                       ),

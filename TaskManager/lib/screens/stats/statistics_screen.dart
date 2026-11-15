@@ -101,34 +101,34 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.cardWhite,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: AppColors.primaryInk, width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.softIceBlue, width: 1.0),
         ),
         title: Text(
           'XUẤT BÁO CÁO TỔNG HỢP',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: AppColors.primaryInk,
+            fontWeight: FontWeight.w700,
+            color: AppColors.obsidianDark,
           ),
         ),
         content: SizedBox(
           width: double.maxFinite,
           child: SingleChildScrollView(
             child: Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: AppColors.scaffoldBackground,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                color: AppColors.frostBackground,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.softIceBlue, width: 1.0),
               ),
               child: Text(
                 reportText,
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primaryInk,
-                  height: 1.35,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.obsidianDark,
+                  height: 1.4,
                 ),
               ),
             ),
@@ -141,15 +141,17 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               'ĐÓNG',
               style: GoogleFonts.spaceGrotesk(
                 fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: AppColors.secondaryText,
+                fontWeight: FontWeight.w600,
+                color: AppColors.slateSteel,
               ),
             ),
           ),
           BrutalistButton(
             text: 'SAO CHÉP BÁO CÁO',
-            icon: Icons.copy,
+            icon: Icons.copy_rounded,
             height: 42,
+            backgroundColor: AppColors.royalCobalt,
+            textColor: Colors.white,
             onPressed: () async {
               final messenger = ScaffoldMessenger.of(context);
               final nav = Navigator.of(ctx);
@@ -160,11 +162,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   content: Text(
                     'Đã sao chép báo cáo tóm tắt vào bộ nhớ tạm!',
                     style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
-                  backgroundColor: AppColors.primaryInk,
+                  backgroundColor: AppColors.obsidianDark,
                   behavior: SnackBarBehavior.floating,
                 ),
               );
@@ -186,17 +188,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   void _showMemberPerformanceDialog(TaskMemberWorkload member) {
     final rate = member.completionRate;
     String ratingText = 'XUẤT SẮC 🌟';
-    Color ratingBg = AppColors.primaryAccent;
-    Color ratingColor = AppColors.primaryInk;
+    Color ratingBg = AppColors.successMintLight;
+    Color ratingColor = AppColors.successMint;
+    Color ratingBorder = AppColors.successMintBorder;
 
     if (rate < 50) {
       ratingText = 'CẦN ĐẨY NHANH ⚠️';
-      ratingBg = AppColors.danger;
-      ratingColor = Colors.white;
+      ratingBg = AppColors.terracottaAlertLight;
+      ratingColor = AppColors.terracottaAlert;
+      ratingBorder = AppColors.terracottaAlertBorder;
     } else if (rate < 80) {
       ratingText = 'ĐẠT TIẾN ĐỘ 🚀';
-      ratingBg = AppColors.cardWhite;
-      ratingColor = AppColors.primaryInk;
+      ratingBg = AppColors.inProgressBlueLight;
+      ratingColor = AppColors.royalCobalt;
+      ratingBorder = AppColors.inProgressBlueBorder;
     }
 
     showDialog(
@@ -204,8 +209,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: AppColors.cardWhite,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: AppColors.primaryInk, width: 2.0),
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppColors.softIceBlue, width: 1.0),
         ),
         titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
         contentPadding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -225,15 +230,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     member.user.fullName,
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.primaryInk,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.obsidianDark,
                     ),
                   ),
                   Text(
                     member.user.email,
                     style: GoogleFonts.inter(
                       fontSize: 12,
-                      color: AppColors.secondaryText,
+                      color: AppColors.slateSteel,
                     ),
                   ),
                 ],
@@ -241,188 +246,206 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             ),
           ],
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Divider(color: AppColors.primaryInk, thickness: 1.5),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'ĐÁNH GIÁ HIỆU SUẤT:',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.secondaryText,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: ratingBg,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: AppColors.primaryInk, width: 1.2),
-                  ),
-                  child: Text(
-                    ratingText,
-                    style: GoogleFonts.spaceGrotesk(
+        content: SizedBox(
+          width: double.maxFinite,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Divider(color: AppColors.softIceBlue, thickness: 1.0),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'ĐÁNH GIÁ HIỆU SUẤT:',
+                    style: GoogleFonts.jetBrainsMono(
                       fontSize: 11,
-                      fontWeight: FontWeight.w900,
-                      color: ratingColor,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.slateSteel,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppColors.scaffoldBackground,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                      color: ratingBg,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: ratingBorder, width: 1.0),
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${member.taskCount}',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        Text(
-                          'ĐƯỢC GIAO',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.secondaryText,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      ratingText,
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: ratingColor,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primaryAccent,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${member.completedCount}',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        Text(
-                          'HOÀN THÀNH',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primaryInk,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: member.overdueCount > 0
-                          ? const Color(0xFFFFECEB)
-                          : AppColors.scaffoldBackground,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                    ),
-                    child: Column(
-                      children: [
-                        Text(
-                          '${member.overdueCount}',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
-                            color: member.overdueCount > 0
-                                ? AppColors.danger
-                                : AppColors.primaryInk,
-                          ),
-                        ),
-                        Text(
-                          'QUÁ HẠN',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.secondaryText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tỷ lệ hoàn thành:',
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  '$rate%',
-                  style: GoogleFonts.jetBrainsMono(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Container(
-              height: 14,
-              decoration: BoxDecoration(
-                color: AppColors.scaffoldBackground,
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                ],
               ),
-              child: FractionallySizedBox(
-                alignment: Alignment.centerLeft,
-                widthFactor: (rate / 100.0).clamp(0.0, 1.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryAccent,
-                    borderRadius: BorderRadius.circular(2),
+              const SizedBox(height: 14),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.frostBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${member.taskCount}',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.obsidianDark,
+                            ),
+                          ),
+                          Text(
+                            'ĐƯỢC GIAO',
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.slateSteel,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.successMintLight,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.successMintBorder, width: 1.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${member.completedCount}',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.successMint,
+                            ),
+                          ),
+                          Text(
+                            'HOÀN THÀNH',
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.successMint,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: member.overdueCount > 0
+                            ? AppColors.terracottaAlertLight
+                            : AppColors.frostBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: member.overdueCount > 0
+                              ? AppColors.terracottaAlertBorder
+                              : AppColors.softIceBlue,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${member.overdueCount}',
+                            style: GoogleFonts.spaceGrotesk(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: member.overdueCount > 0
+                                  ? AppColors.terracottaAlert
+                                  : AppColors.obsidianDark,
+                            ),
+                          ),
+                          Text(
+                            'QUÁ HẠN',
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: member.overdueCount > 0
+                                  ? AppColors.terracottaAlert
+                                  : AppColors.slateSteel,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
-            BrutalistButton(
-              text: 'ĐÓNG',
-              backgroundColor: AppColors.primaryInk,
-              textColor: Colors.white,
-              height: 40,
-              onPressed: () => Navigator.of(ctx).pop(),
-            ),
-          ],
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Tỷ lệ hoàn thành:',
+                    style: GoogleFonts.inter(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.obsidianDark,
+                    ),
+                  ),
+                  Text(
+                    '$rate%',
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.royalCobalt,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final barWidth = (constraints.maxWidth * (rate / 100.0)).clamp(0.0, constraints.maxWidth);
+                  return Container(
+                    height: 10,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondarySurface,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      width: barWidth,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: AppColors.royalCobalt,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 18),
+              BrutalistButton(
+                text: 'ĐÓNG',
+                backgroundColor: AppColors.royalCobalt,
+                textColor: Colors.white,
+                height: 40,
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -494,10 +517,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.cardWhite,
+        color: isAlert ? AppColors.terracottaAlertLight : AppColors.cardWhite,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isAlert ? const Color(0xFFF3C7C2) : AppColors.softIceBlue,
+          color: isAlert ? AppColors.terracottaAlertBorder : AppColors.softIceBlue,
           width: 1.0,
         ),
         boxShadow: const [
@@ -518,16 +541,16 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 label,
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 11,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 0.8,
-                  color: isAlert ? Colors.white : AppColors.secondaryText,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  color: isAlert ? AppColors.terracottaAlert : AppColors.slateSteel,
                 ),
               ),
               if (icon != null)
                 Icon(
                   icon,
                   size: 16,
-                  color: isAlert ? Colors.white : AppColors.primaryInk,
+                  color: isAlert ? AppColors.terracottaAlert : AppColors.royalCobalt,
                 ),
             ],
           ),
@@ -535,10 +558,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           Text(
             value,
             style: GoogleFonts.spaceGrotesk(
-              fontSize: 28,
-              fontWeight: FontWeight.w900,
-              color: textColor,
-              letterSpacing: -1.0,
+              fontSize: 26,
+              fontWeight: FontWeight.w700,
+              color: isAlert ? AppColors.terracottaAlert : textColor,
+              letterSpacing: -0.5,
             ),
           ),
           const SizedBox(height: 4),
@@ -546,8 +569,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             subtitle,
             style: GoogleFonts.inter(
               fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: isAlert ? Colors.white70 : AppColors.secondaryText,
+              fontWeight: FontWeight.w500,
+              color: isAlert ? AppColors.terracottaAlert : AppColors.slateSteel,
             ),
           ),
         ],
@@ -573,35 +596,37 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 label,
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 13,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryInk,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.obsidianDark,
                 ),
               ),
               Text(
                 '$count ($percentage%)',
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.secondaryText,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.slateSteel,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 6),
           Container(
-            height: 14,
+            height: 10,
             decoration: BoxDecoration(
-              color: AppColors.scaffoldBackground,
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: AppColors.primaryInk, width: 1.5),
+              color: AppColors.secondarySurface,
+              borderRadius: BorderRadius.circular(6),
             ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: (percentage / 100.0).clamp(0.0, 1.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: fillColor,
-                  borderRadius: BorderRadius.circular(2),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: (percentage / 100.0).clamp(0.0, 1.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: fillColor,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
                 ),
               ),
             ),
@@ -614,40 +639,43 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.cardWhite,
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
         title: Text(
-          'THỐNG KÊ // ANALYTICS',
+          'THỐNG KÊ & BÁO CÁO',
           style: GoogleFonts.spaceGrotesk(
             fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 0.5,
+            color: AppColors.obsidianDark,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.share_outlined, color: AppColors.primaryInk),
+            icon: const Icon(Icons.share_outlined, color: AppColors.obsidianDark),
             tooltip: 'Xuất báo cáo tóm tắt',
             onPressed: _exportReport,
           ),
           IconButton(
-            icon: const Icon(Icons.refresh, color: AppColors.primaryInk),
+            icon: const Icon(Icons.refresh_rounded, color: AppColors.obsidianDark),
             tooltip: 'Làm mới số liệu',
             onPressed: _fetchStats,
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
+          preferredSize: const Size.fromHeight(1),
           child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
+            color: AppColors.softIceBlue,
+            height: 1,
           ),
         ),
       ),
       body: RefreshIndicator(
-        color: AppColors.primaryInk,
-        backgroundColor: AppColors.primaryAccent,
+        color: AppColors.royalCobalt,
+        backgroundColor: AppColors.cardWhite,
         onRefresh: _fetchStats,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
@@ -661,14 +689,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 children: [
                   BrutalistBadge(
                     text: 'MODULE E // KPI REPORT',
-                    backgroundColor: AppColors.primaryAccent,
-                    textColor: AppColors.primaryInk,
-                    icon: Icons.pie_chart_outline,
+                    backgroundColor: AppColors.inProgressBlueLight,
+                    textColor: AppColors.royalCobalt,
+                    icon: Icons.pie_chart_outline_rounded,
                   ),
                   BrutalistBadge(
                     text: 'REAL-TIME DATA',
-                    backgroundColor: AppColors.cardWhite,
-                    textColor: AppColors.primaryInk,
+                    backgroundColor: AppColors.successMintLight,
+                    textColor: AppColors.successMint,
                   ),
                 ],
               ),
@@ -685,9 +713,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       'KHOẢNG THỜI GIAN',
                       style: GoogleFonts.jetBrainsMono(
                         fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color: AppColors.secondaryText,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: AppColors.slateSteel,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -718,15 +746,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       ],
                     ),
                     const SizedBox(height: 14),
-                    const Divider(color: AppColors.primaryInk, thickness: 1.2),
+                    const Divider(color: AppColors.softIceBlue, thickness: 1.0),
                     const SizedBox(height: 8),
                     Text(
                       'PHẠM VI CÔNG VIỆC',
                       style: GoogleFonts.jetBrainsMono(
                         fontSize: 11,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.0,
-                        color: AppColors.secondaryText,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: AppColors.slateSteel,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -761,7 +789,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 40.0),
                   child: Center(
-                    child: CircularProgressIndicator(color: AppColors.primaryInk),
+                    child: CircularProgressIndicator(color: AppColors.royalCobalt),
                   ),
                 )
               else if (_errorMessage != null)
@@ -769,14 +797,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   backgroundColor: AppColors.cardWhite,
                   child: Column(
                     children: [
-                      const Icon(Icons.error_outline,
-                          color: AppColors.danger, size: 40),
+                      const Icon(Icons.error_outline_rounded,
+                          color: AppColors.terracottaAlert, size: 40),
                       const SizedBox(height: 10),
                       Text(
                         'LỖI TẢI THỐNG KÊ',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 16,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.obsidianDark,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -785,13 +814,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         textAlign: TextAlign.center,
                         style: GoogleFonts.inter(
                           fontSize: 13,
-                          color: AppColors.secondaryText,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       const SizedBox(height: 14),
                       BrutalistButton(
                         text: 'TẢI LẠI',
-                        icon: Icons.refresh,
+                        icon: Icons.refresh_rounded,
+                        backgroundColor: AppColors.royalCobalt,
+                        textColor: Colors.white,
                         onPressed: _fetchStats,
                       ),
                     ],
@@ -807,8 +838,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         value: '${_stats!.summary.totalTasks}',
                         subtitle: 'Phạm vi đang lọc',
                         backgroundColor: AppColors.cardWhite,
-                        textColor: AppColors.primaryInk,
-                        icon: Icons.list_alt,
+                        textColor: AppColors.obsidianDark,
+                        icon: Icons.list_alt_rounded,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -817,9 +848,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         label: 'HOÀN THÀNH',
                         value: '${_stats!.byStatus.completed.count}',
                         subtitle: 'Tỷ lệ: ${_stats!.summary.completionRate}%',
-                        backgroundColor: AppColors.primaryAccent,
-                        textColor: AppColors.primaryInk,
-                        icon: Icons.task_alt,
+                        backgroundColor: AppColors.cardWhite,
+                        textColor: AppColors.successMint,
+                        icon: Icons.task_alt_rounded,
                       ),
                     ),
                   ],
@@ -833,8 +864,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         value: '${_stats!.byStatus.inProgress.count}',
                         subtitle: 'Đang triển khai',
                         backgroundColor: AppColors.cardWhite,
-                        textColor: AppColors.primaryInk,
-                        icon: Icons.hourglass_top,
+                        textColor: AppColors.royalCobalt,
+                        icon: Icons.hourglass_top_rounded,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -846,11 +877,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             ? 'Cần xử lý khẩn cấp'
                             : 'Tiến độ rất tốt',
                         backgroundColor: _stats!.deadlines.overdue > 0
-                            ? AppColors.danger
+                            ? AppColors.terracottaAlertLight
                             : AppColors.cardWhite,
                         textColor: _stats!.deadlines.overdue > 0
-                            ? Colors.white
-                            : AppColors.primaryInk,
+                            ? AppColors.terracottaAlert
+                            : AppColors.obsidianDark,
                         icon: Icons.warning_amber_rounded,
                         isAlert: _stats!.deadlines.overdue > 0,
                       ),
@@ -872,37 +903,40 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             'HIỆU SUẤT HOÀN THÀNH',
                             style: GoogleFonts.spaceGrotesk(
                               fontSize: 14,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w700,
                               letterSpacing: 0.5,
-                              color: AppColors.primaryInk,
+                              color: AppColors.obsidianDark,
                             ),
                           ),
                           Text(
                             '${_stats!.summary.completionRate}%',
                             style: GoogleFonts.jetBrainsMono(
                               fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.primaryInk,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.royalCobalt,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 10),
                       Container(
-                        height: 22,
+                        height: 14,
                         decoration: BoxDecoration(
-                          color: AppColors.scaffoldBackground,
-                          borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: AppColors.primaryInk, width: 2),
+                          color: AppColors.secondarySurface,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        child: FractionallySizedBox(
-                          alignment: Alignment.centerLeft,
-                          widthFactor:
-                              (_stats!.summary.completionRate / 100.0).clamp(0.0, 1.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryAccent,
-                              borderRadius: BorderRadius.circular(3),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor:
+                                (_stats!.summary.completionRate / 100.0).clamp(0.0, 1.0),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [AppColors.royalCobalt, AppColors.skyAzure],
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -912,8 +946,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         'Tỷ lệ hoàn thành đúng hạn: ${_stats!.summary.completedOnTimeRate}%',
                         style: GoogleFonts.inter(
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondaryText,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                     ],
@@ -931,9 +965,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         'PHÂN BỔ THEO TRẠNG THÁI',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 14,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
-                          color: AppColors.primaryInk,
+                          color: AppColors.obsidianDark,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -941,25 +975,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         label: 'Chờ xử lý (TODO)',
                         count: _stats!.byStatus.todo.count,
                         percentage: _stats!.byStatus.todo.percentage,
-                        fillColor: AppColors.secondarySurface,
+                        fillColor: AppColors.slateSteel,
                       ),
                       _buildProgressBar(
                         label: 'Đang làm (IN PROGRESS)',
                         count: _stats!.byStatus.inProgress.count,
                         percentage: _stats!.byStatus.inProgress.percentage,
-                        fillColor: AppColors.primaryAccent,
+                        fillColor: AppColors.royalCobalt,
                       ),
                       _buildProgressBar(
                         label: 'Hoàn thành (COMPLETED)',
                         count: _stats!.byStatus.completed.count,
                         percentage: _stats!.byStatus.completed.percentage,
-                        fillColor: AppColors.primaryInk,
+                        fillColor: AppColors.successMint,
                       ),
                       _buildProgressBar(
                         label: 'Đã hủy (CANCELLED)',
                         count: _stats!.byStatus.cancelled.count,
                         percentage: _stats!.byStatus.cancelled.percentage,
-                        fillColor: AppColors.danger,
+                        fillColor: AppColors.terracottaAlert,
                       ),
                     ],
                   ),
@@ -976,9 +1010,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         'PHÂN BỔ THEO ĐỘ ƯU TIÊN',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 14,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
-                          color: AppColors.primaryInk,
+                          color: AppColors.obsidianDark,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -986,19 +1020,19 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         label: 'Khẩn cấp / Cao (HIGH)',
                         count: _stats!.byPriority.high.count,
                         percentage: _stats!.byPriority.high.percentage,
-                        fillColor: AppColors.danger,
+                        fillColor: AppColors.terracottaAlert,
                       ),
                       _buildProgressBar(
                         label: 'Trung bình (MEDIUM)',
                         count: _stats!.byPriority.medium.count,
                         percentage: _stats!.byPriority.medium.percentage,
-                        fillColor: AppColors.primaryAccent,
+                        fillColor: AppColors.warningAmber,
                       ),
                       _buildProgressBar(
                         label: 'Thấp (LOW)',
                         count: _stats!.byPriority.low.count,
                         percentage: _stats!.byPriority.low.percentage,
-                        fillColor: AppColors.secondarySurface,
+                        fillColor: AppColors.royalCobalt,
                       ),
                     ],
                   ),
@@ -1015,9 +1049,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         'GIÁM SÁT HẠN CHÓT (DEADLINES)',
                         style: GoogleFonts.spaceGrotesk(
                           fontSize: 14,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: 0.5,
-                          color: AppColors.primaryInk,
+                          color: AppColors.obsidianDark,
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -1028,10 +1062,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: _stats!.deadlines.overdue > 0
-                                    ? const Color(0xFFFFECEB)
-                                    : AppColors.scaffoldBackground,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                    ? AppColors.terracottaAlertLight
+                                    : AppColors.frostBackground,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: _stats!.deadlines.overdue > 0
+                                      ? AppColors.terracottaAlertBorder
+                                      : AppColors.softIceBlue,
+                                  width: 1.0,
+                                ),
                               ),
                               child: Column(
                                 children: [
@@ -1039,10 +1078,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     '${_stats!.deadlines.overdue}',
                                     style: GoogleFonts.spaceGrotesk(
                                       fontSize: 22,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.w700,
                                       color: _stats!.deadlines.overdue > 0
-                                          ? AppColors.danger
-                                          : AppColors.primaryInk,
+                                          ? AppColors.terracottaAlert
+                                          : AppColors.obsidianDark,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
@@ -1050,8 +1089,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     'QUÁ HẠN',
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.secondaryText,
+                                      fontWeight: FontWeight.w700,
+                                      color: _stats!.deadlines.overdue > 0
+                                          ? AppColors.terracottaAlert
+                                          : AppColors.slateSteel,
                                     ),
                                   ),
                                 ],
@@ -1064,10 +1105,15 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: _stats!.deadlines.dueSoon > 0
-                                    ? const Color(0xFFFFFBEA)
-                                    : AppColors.scaffoldBackground,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                    ? AppColors.warningAmberLight
+                                    : AppColors.frostBackground,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: _stats!.deadlines.dueSoon > 0
+                                      ? AppColors.warningAmberBorder
+                                      : AppColors.softIceBlue,
+                                  width: 1.0,
+                                ),
                               ),
                               child: Column(
                                 children: [
@@ -1075,8 +1121,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     '${_stats!.deadlines.dueSoon}',
                                     style: GoogleFonts.spaceGrotesk(
                                       fontSize: 22,
-                                      fontWeight: FontWeight.w900,
-                                      color: AppColors.primaryInk,
+                                      fontWeight: FontWeight.w700,
+                                      color: _stats!.deadlines.dueSoon > 0
+                                          ? AppColors.warningAmber
+                                          : AppColors.obsidianDark,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
@@ -1084,8 +1132,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     'TRONG 24H',
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.secondaryText,
+                                      fontWeight: FontWeight.w700,
+                                      color: _stats!.deadlines.dueSoon > 0
+                                          ? AppColors.warningAmber
+                                          : AppColors.slateSteel,
                                     ),
                                   ),
                                 ],
@@ -1097,9 +1147,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                             child: Container(
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                color: AppColors.scaffoldBackground,
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                color: AppColors.successMintLight,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.successMintBorder,
+                                  width: 1.0,
+                                ),
                               ),
                               child: Column(
                                 children: [
@@ -1107,8 +1160,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     '${_stats!.deadlines.completedOnTime}',
                                     style: GoogleFonts.spaceGrotesk(
                                       fontSize: 22,
-                                      fontWeight: FontWeight.w900,
-                                      color: AppColors.primaryInk,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.successMint,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
@@ -1116,8 +1169,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                     'ĐÚNG HẠN',
                                     style: GoogleFonts.jetBrainsMono(
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w800,
-                                      color: AppColors.secondaryText,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.successMint,
                                     ),
                                   ),
                                 ],
@@ -1142,9 +1195,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           'KHỐI LƯỢNG CÔNG VIỆC THÀNH VIÊN (E3)',
                           style: GoogleFonts.spaceGrotesk(
                             fontSize: 14,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                             letterSpacing: 0.5,
-                            color: AppColors.primaryInk,
+                            color: AppColors.obsidianDark,
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -1154,7 +1207,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           itemCount: _stats!.memberWorkloads.length,
                           separatorBuilder: (context, index) => const Padding(
                             padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Divider(color: AppColors.scaffoldBackground, thickness: 1.5),
+                            child: Divider(color: AppColors.softIceBlue, thickness: 1.0),
                           ),
                           itemBuilder: (context, index) {
                             final member = _stats!.memberWorkloads[index];
@@ -1163,99 +1216,107 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                 : 0;
 
                             return InkWell(
-                                onTap: () => _showMemberPerformanceDialog(member),
+                              onTap: () => _showMemberPerformanceDialog(member),
+                              borderRadius: BorderRadius.circular(12),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 4.0),
                                 child: Row(
-                              children: [
-                                Container(
-                                  width: 28,
-                                  height: 28,
-                                  decoration: BoxDecoration(
-                                    color: index == 0
-                                        ? AppColors.primaryAccent
-                                        : AppColors.scaffoldBackground,
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(
-                                      color: AppColors.primaryInk,
-                                      width: 1.2,
-                                    ),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    '#${index + 1}',
-                                    style: GoogleFonts.spaceGrotesk(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w900,
-                                      color: AppColors.primaryInk,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                BrutalistAvatar(
-                                  avatarUrl: member.user.avatarUrl,
-                                  name: member.user.fullName,
-                                  size: 34,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        member.user.fullName,
+                                  children: [
+                                    Container(
+                                      width: 28,
+                                      height: 28,
+                                      decoration: BoxDecoration(
+                                        color: index == 0
+                                            ? AppColors.inProgressBlueLight
+                                            : AppColors.frostBackground,
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(
+                                          color: index == 0
+                                              ? AppColors.inProgressBlueBorder
+                                              : AppColors.softIceBlue,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '#${index + 1}',
                                         style: GoogleFonts.spaceGrotesk(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.primaryInk,
-                                        ),
-                                      ),
-                                      Text(
-                                        member.user.email,
-                                        style: GoogleFonts.inter(
                                           fontSize: 11,
-                                          color: AppColors.secondaryText,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.scaffoldBackground,
-                                    borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(
-                                      color: AppColors.primaryInk,
-                                      width: 1.2,
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${member.completedCount}/${member.taskCount} XONG',
-                                        style: GoogleFonts.jetBrainsMono(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w800,
-                                          color: AppColors.primaryInk,
-                                        ),
-                                      ),
-                                      Text(
-                                        '$rate%',
-                                        style: GoogleFonts.jetBrainsMono(
-                                          fontSize: 10,
                                           fontWeight: FontWeight.w700,
-                                          color: AppColors.secondaryText,
+                                          color: index == 0
+                                              ? AppColors.royalCobalt
+                                              : AppColors.slateSteel,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    BrutalistAvatar(
+                                      avatarUrl: member.user.avatarUrl,
+                                      name: member.user.fullName,
+                                      size: 34,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            member.user.fullName,
+                                            style: GoogleFonts.spaceGrotesk(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.obsidianDark,
+                                            ),
+                                          ),
+                                          Text(
+                                            member.user.email,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 11,
+                                              color: AppColors.slateSteel,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.frostBackground,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: AppColors.softIceBlue,
+                                          width: 1.0,
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            '${member.completedCount}/${member.taskCount} XONG',
+                                            style: GoogleFonts.jetBrainsMono(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w700,
+                                              color: AppColors.royalCobalt,
+                                            ),
+                                          ),
+                                          Text(
+                                            '$rate%',
+                                            style: GoogleFonts.jetBrainsMono(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColors.slateSteel,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                              );
+                              ),
+                            );
                           },
                         ),
                       ],

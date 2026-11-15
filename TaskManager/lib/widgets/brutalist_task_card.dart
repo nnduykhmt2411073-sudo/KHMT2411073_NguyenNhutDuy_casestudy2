@@ -5,7 +5,7 @@ import '../models/task.dart';
 import '../utils/app_colors.dart';
 import 'brutalist_avatar.dart';
 
-/// Thẻ công việc chuẩn phong cách Modern B2B SaaS (Frost-Obsidian: Bo góc 18px, viền 1px softIceBlue, bóng mềm đa tầng)
+/// Thẻ công việc chuẩn phong cách Modern B2B SaaS (Soft Tone Pastel: Nhạt nhạt, êm dịu, bảo vệ mắt, dễ đọc)
 class BrutalistTaskCard extends StatelessWidget {
   final Task task;
   final String? currentUserId;
@@ -35,16 +35,16 @@ class BrutalistTaskCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 14.0),
+        margin: const EdgeInsets.only(bottom: 12.0),
         decoration: BoxDecoration(
           color: AppColors.cardWhite,
-          borderRadius: BorderRadius.circular(18.0),
+          borderRadius: BorderRadius.circular(16.0),
           border: Border.all(color: AppColors.softIceBlue, width: 1.0),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x0A03040B),
-              offset: Offset(0, 4),
-              blurRadius: 14,
+              color: Color(0x060F172A),
+              offset: Offset(0, 2),
+              blurRadius: 10,
             ),
           ],
         ),
@@ -52,7 +52,7 @@ class BrutalistTaskCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Row 1: Scope Badge (Tôi tạo / Được chia sẻ RBAC - C5) + Priority Badge
+            // Row 1: Scope Badge (Tôi tạo / Được chia sẻ) + Priority Badge
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -70,7 +70,7 @@ class BrutalistTaskCard extends StatelessWidget {
               onTap: onStatusTap,
               child: _buildStatusBadge(task.status),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // Task Title
             Text(
@@ -78,16 +78,16 @@ class BrutalistTaskCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.spaceGrotesk(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w700,
                 color: AppColors.obsidianDark,
-                height: 1.3,
+                height: 1.35,
               ),
             ),
 
             // Task Description (if any)
             if (task.description.trim().isNotEmpty) ...[
-              const SizedBox(height: 6),
+              const SizedBox(height: 5),
               Text(
                 task.description.trim(),
                 maxLines: 2,
@@ -101,14 +101,14 @@ class BrutalistTaskCard extends StatelessWidget {
               ),
             ],
 
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
 
-            // Divider line mềm mại
+            // Divider line mềm mại mỏng 1px
             Container(
               height: 1.0,
-              color: AppColors.softIceBlue.withValues(alpha: 0.6),
+              color: AppColors.softIceBlue,
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
 
             // Footer Row: Due Date & Assignees / Creator
             Row(
@@ -120,10 +120,10 @@ class BrutalistTaskCard extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.calendar_today_rounded,
-                        size: 14,
+                        size: 13,
                         color: isOverdue ? AppColors.terracottaAlert : AppColors.slateSteel,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 5),
                       Text(
                         DateFormat('dd/MM/yyyy').format(task.dueDate!),
                         style: GoogleFonts.jetBrainsMono(
@@ -133,13 +133,13 @@ class BrutalistTaskCard extends StatelessWidget {
                         ),
                       ),
                       if (isOverdue) ...[
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
                           decoration: BoxDecoration(
                             color: AppColors.terracottaAlertLight,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: const Color(0xFFF3C7C2), width: 0.8),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppColors.terracottaAlertBorder, width: 0.8),
                           ),
                           child: Text(
                             'QUÁ HẠN',
@@ -158,15 +158,15 @@ class BrutalistTaskCard extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.event_busy_outlined,
-                        size: 14,
+                        size: 13,
                         color: AppColors.slateSteel,
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 5),
                       Text(
-                        'KHÔNG CÓ HẠN',
-                        style: GoogleFonts.jetBrainsMono(
+                        'Không có hạn',
+                        style: GoogleFonts.inter(
                           fontSize: 11,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w400,
                           color: AppColors.slateSteel,
                         ),
                       ),
@@ -186,21 +186,21 @@ class BrutalistTaskCard extends StatelessWidget {
   Widget _buildScopeBadge(bool isOwner, dynamic sharedMember) {
     if (isOwner) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
         decoration: BoxDecoration(
-          color: const Color(0xFFEBF3FC),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.softIceBlue, width: 0.8),
+          color: const Color(0xFFEFF6FF),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFBFDBFE), width: 0.8),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             const Icon(Icons.star_rounded, size: 12, color: AppColors.royalCobalt),
-            const SizedBox(width: 4),
+            const SizedBox(width: 3),
             Text(
               'CHỦ SỞ HỮU',
               style: GoogleFonts.jetBrainsMono(
-                fontSize: 10,
+                fontSize: 9,
                 fontWeight: FontWeight.w700,
                 color: AppColors.royalCobalt,
               ),
@@ -212,36 +212,36 @@ class BrutalistTaskCard extends StatelessWidget {
       final role = (sharedMember.role as String).toUpperCase();
       final isAdmin = role == 'ADMIN';
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
         decoration: BoxDecoration(
-          color: isAdmin ? AppColors.terracottaAlertLight : const Color(0xFFF0F4FA),
-          borderRadius: BorderRadius.circular(12),
+          color: isAdmin ? AppColors.terracottaAlertLight : const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isAdmin ? const Color(0xFFF3C7C2) : AppColors.softIceBlue,
+            color: isAdmin ? AppColors.terracottaAlertBorder : AppColors.softIceBlue,
             width: 0.8,
           ),
         ),
         child: Text(
           'CHIA SẺ // $role',
           style: GoogleFonts.jetBrainsMono(
-            fontSize: 10,
+            fontSize: 9,
             fontWeight: FontWeight.w700,
-            color: isAdmin ? AppColors.terracottaAlert : AppColors.midnightIndigo,
+            color: isAdmin ? AppColors.terracottaAlert : AppColors.slateSteel,
           ),
         ),
       );
     } else {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
         decoration: BoxDecoration(
-          color: AppColors.frostBackground,
-          borderRadius: BorderRadius.circular(12),
+          color: const Color(0xFFF8FAFC),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.softIceBlue, width: 0.8),
         ),
         child: Text(
           'ĐƯỢC PHÂN CÔNG',
           style: GoogleFonts.jetBrainsMono(
-            fontSize: 10,
+            fontSize: 9,
             fontWeight: FontWeight.w600,
             color: AppColors.slateSteel,
           ),
@@ -254,43 +254,43 @@ class BrutalistTaskCard extends StatelessWidget {
     switch (status) {
       case 'in_progress':
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
-            color: const Color(0xFFE8F4FD),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: AppColors.softIceBlue, width: 0.8),
+            color: AppColors.inProgressBlueLight,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.inProgressBlueBorder, width: 0.8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.sync_rounded, size: 13, color: AppColors.skyAzure),
-              const SizedBox(width: 5),
+              const Icon(Icons.sync_rounded, size: 12, color: AppColors.inProgressBlue),
+              const SizedBox(width: 4),
               Text(
                 'ĐANG LÀM',
                 style: GoogleFonts.jetBrainsMono(
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.skyAzure,
+                  color: AppColors.inProgressBlue,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: AppColors.skyAzure),
+              const SizedBox(width: 3),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 13, color: AppColors.inProgressBlue),
             ],
           ),
         );
       case 'completed':
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
             color: AppColors.successMintLight,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFB7EB8F), width: 0.8),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.successMintBorder, width: 0.8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle_rounded, size: 13, color: AppColors.successMint),
-              const SizedBox(width: 5),
+              const Icon(Icons.check_circle_rounded, size: 12, color: AppColors.successMint),
+              const SizedBox(width: 4),
               Text(
                 'HOÀN THÀNH',
                 style: GoogleFonts.jetBrainsMono(
@@ -299,24 +299,24 @@ class BrutalistTaskCard extends StatelessWidget {
                   color: AppColors.successMint,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: AppColors.successMint),
+              const SizedBox(width: 3),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 13, color: AppColors.successMint),
             ],
           ),
         );
       case 'cancelled':
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
             color: AppColors.terracottaAlertLight,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xFFF3C7C2), width: 0.8),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.terracottaAlertBorder, width: 0.8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.cancel_outlined, size: 13, color: AppColors.terracottaAlert),
-              const SizedBox(width: 5),
+              const Icon(Icons.cancel_outlined, size: 12, color: AppColors.terracottaAlert),
+              const SizedBox(width: 4),
               Text(
                 'ĐÃ HỦY',
                 style: GoogleFonts.jetBrainsMono(
@@ -325,25 +325,25 @@ class BrutalistTaskCard extends StatelessWidget {
                   color: AppColors.terracottaAlert,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: AppColors.terracottaAlert),
+              const SizedBox(width: 3),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 13, color: AppColors.terracottaAlert),
             ],
           ),
         );
       case 'todo':
       default:
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3.5),
           decoration: BoxDecoration(
-            color: AppColors.frostBackground,
-            borderRadius: BorderRadius.circular(14),
+            color: const Color(0xFFF8FAFC),
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.softIceBlue, width: 0.8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.hourglass_empty_rounded, size: 13, color: AppColors.slateSteel),
-              const SizedBox(width: 5),
+              const Icon(Icons.hourglass_empty_rounded, size: 12, color: AppColors.slateSteel),
+              const SizedBox(width: 4),
               Text(
                 'CHỜ XỬ LÝ',
                 style: GoogleFonts.jetBrainsMono(
@@ -352,8 +352,8 @@ class BrutalistTaskCard extends StatelessWidget {
                   color: AppColors.slateSteel,
                 ),
               ),
-              const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 14, color: AppColors.slateSteel),
+              const SizedBox(width: 3),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 13, color: AppColors.slateSteel),
             ],
           ),
         );
@@ -364,21 +364,21 @@ class BrutalistTaskCard extends StatelessWidget {
     switch (priority.toLowerCase()) {
       case 'high':
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
           decoration: BoxDecoration(
             color: AppColors.terracottaAlertLight,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFF3C7C2), width: 0.8),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.terracottaAlertBorder, width: 0.8),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.priority_high_rounded, size: 12, color: AppColors.terracottaAlert),
-              const SizedBox(width: 3),
+              const Icon(Icons.priority_high_rounded, size: 11, color: AppColors.terracottaAlert),
+              const SizedBox(width: 2),
               Text(
                 'ƯU TIÊN CAO',
                 style: GoogleFonts.jetBrainsMono(
-                  fontSize: 10,
+                  fontSize: 9,
                   fontWeight: FontWeight.w700,
                   color: AppColors.terracottaAlert,
                 ),
@@ -388,34 +388,34 @@ class BrutalistTaskCard extends StatelessWidget {
         );
       case 'medium':
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFF7E6),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFFFE7BA), width: 0.8),
+            color: AppColors.warningAmberLight,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.warningAmberBorder, width: 0.8),
           ),
           child: Text(
             'TRUNG BÌNH',
             style: GoogleFonts.jetBrainsMono(
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: FontWeight.w700,
-              color: const Color(0xFFD48806),
+              color: AppColors.warningAmber,
             ),
           ),
         );
       case 'low':
       default:
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
           decoration: BoxDecoration(
-            color: AppColors.frostBackground,
-            borderRadius: BorderRadius.circular(12),
+            color: const Color(0xFFF8FAFC),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(color: AppColors.softIceBlue, width: 0.8),
           ),
           child: Text(
             'THẤP',
             style: GoogleFonts.jetBrainsMono(
-              fontSize: 10,
+              fontSize: 9,
               fontWeight: FontWeight.w600,
               color: AppColors.slateSteel,
             ),
@@ -440,10 +440,10 @@ class BrutalistTaskCard extends StatelessWidget {
         BrutalistAvatar(
           avatarUrl: assignee.avatarUrl,
           name: name,
-          size: 24,
+          size: 22,
           backgroundColor: AppColors.midnightIndigo,
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 120),
           child: Text(
@@ -451,8 +451,8 @@ class BrutalistTaskCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.inter(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
               color: AppColors.obsidianDark,
             ),
           ),

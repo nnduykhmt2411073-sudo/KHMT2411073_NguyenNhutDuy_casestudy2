@@ -75,15 +75,15 @@ class BrutalistAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final effectiveBorder = border ??
         Border.all(
-          color: AppColors.primaryInk,
-          width: size > 32 ? 2.0 : 1.5,
+          color: AppColors.softIceBlue,
+          width: 1.0,
         );
 
     final effectiveRadius = shape == BoxShape.circle
         ? null
         : (borderRadius ?? BorderRadius.circular(size * 0.2));
 
-    final effectiveBg = backgroundColor ?? AppColors.primaryAccent;
+    final effectiveBg = backgroundColor ?? AppColors.midnightIndigo;
     final initials = _getInitials(name);
     final fontSize = size * 0.38;
 
@@ -93,8 +93,10 @@ class BrutalistAvatar extends StatelessWidget {
         style: textStyle ??
             GoogleFonts.spaceGrotesk(
               fontSize: fontSize,
-              fontWeight: FontWeight.w900,
-              color: AppColors.primaryInk,
+              fontWeight: FontWeight.w700,
+              color: effectiveBg == AppColors.midnightIndigo || effectiveBg == AppColors.obsidianDark || effectiveBg == AppColors.royalCobalt
+                  ? Colors.white
+                  : AppColors.obsidianDark,
             ),
       ),
     );

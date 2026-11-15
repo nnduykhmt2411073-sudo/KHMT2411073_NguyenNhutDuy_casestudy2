@@ -5,12 +5,12 @@ import '../../models/user.dart';
 import '../../services/task_service.dart';
 import '../../utils/app_colors.dart';
 import '../../utils/validators.dart';
-import '../../widgets/brutalist_badge.dart';
 import '../../widgets/brutalist_button.dart';
-import '../../widgets/brutalist_card.dart';
 import '../../widgets/brutalist_text_field.dart';
 import '../../widgets/brutalist_user_picker.dart';
 
+/// Màn hình khởi tạo công việc chuẩn Modern B2B SaaS (Frost Blue & Deep Obsidian)
+/// Tuân thủ quy chuẩn skill flutter-saas-builder: Form Validation, Bo góc 14-20px, Viền mảnh 1px softIceBlue
 class TaskCreateScreen extends StatefulWidget {
   const TaskCreateScreen({super.key});
 
@@ -59,10 +59,10 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
-              primary: AppColors.primaryInk,
+              primary: AppColors.royalCobalt,
               onPrimary: Colors.white,
-              surface: AppColors.scaffoldBackground,
-              onSurface: AppColors.primaryInk,
+              surface: AppColors.cardWhite,
+              onSurface: AppColors.obsidianDark,
             ),
           ),
           child: child!,
@@ -153,22 +153,21 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: AppColors.primaryAccent,
+          backgroundColor: AppColors.royalCobalt,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: const BorderSide(color: AppColors.primaryInk, width: 2),
+            borderRadius: BorderRadius.circular(12),
           ),
           content: Row(
             children: [
-              const Icon(Icons.check_circle_outline, color: AppColors.primaryInk, size: 24),
+              const Icon(Icons.check_circle_rounded, color: Colors.white, size: 22),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   'Đã tạo công việc: "${task.title}"',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: AppColors.primaryInk,
-                    fontWeight: FontWeight.w700,
+                  style: GoogleFonts.inter(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -197,28 +196,22 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
     final dateFormat = DateFormat('dd/MM/yyyy');
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
         title: Text(
-          'TẠO CÔNG VIỆC MỚI // B1 & C2',
+          'Tạo công việc mới',
           style: GoogleFonts.spaceGrotesk(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.obsidianDark,
           ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
           child: Form(
             key: _formKey,
             child: Column(
@@ -228,37 +221,61 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    BrutalistBadge(
-                      text: 'TASK OPS // CREATE',
-                      backgroundColor: AppColors.primaryAccent,
-                      textColor: AppColors.primaryInk,
-                      icon: Icons.add_task,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEBF3FC),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: AppColors.softIceBlue, width: 0.8),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.add_task_rounded, size: 14, color: AppColors.royalCobalt),
+                          const SizedBox(width: 5),
+                          Text(
+                            'TASK OPS // B1 & C2',
+                            style: GoogleFonts.jetBrainsMono(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.royalCobalt,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    BrutalistBadge(
-                      text: 'MODULE B & C',
-                      backgroundColor: AppColors.cardWhite,
-                      textColor: AppColors.primaryInk,
+                    Text(
+                      'KHMT2411073',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.slateSteel,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
 
                 // Error Banner nếu có
                 if (_errorMessage != null) ...[
-                  BrutalistCard(
-                    backgroundColor: AppColors.danger,
+                  Container(
                     padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.terracottaAlertLight,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: const Color(0xFFF3C7C2), width: 1.0),
+                    ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.error_outline, color: Colors.white, size: 22),
+                        const Icon(Icons.error_outline_rounded, color: AppColors.terracottaAlert, size: 20),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             _errorMessage!,
-                            style: GoogleFonts.spaceGrotesk(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            style: GoogleFonts.inter(
+                              color: AppColors.terracottaAlert,
+                              fontWeight: FontWeight.w600,
                               fontSize: 13,
                             ),
                           ),
@@ -266,12 +283,24 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
                 ],
 
-                // Form Card
-                BrutalistCard(
+                // Form Card chính
+                Container(
                   padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: AppColors.cardWhite,
+                    borderRadius: BorderRadius.circular(20.0),
+                    border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0x0A03040B),
+                        offset: Offset(0, 4),
+                        blurRadius: 16,
+                      ),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -280,7 +309,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                         label: 'Tên công việc *',
                         hintText: 'VD: Hoàn thiện báo cáo đồ án Case Study 2',
                         controller: _titleController,
-                        prefixIcon: const Icon(Icons.title, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.title_rounded, color: AppColors.slateSteel),
                         validator: (val) => Validators.required(val, 'Tên công việc'),
                       ),
                       const SizedBox(height: 16),
@@ -291,7 +320,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                         hintText: 'Nhập nội dung, yêu cầu cụ thể của công việc...',
                         controller: _descriptionController,
                         maxLines: 4,
-                        prefixIcon: const Icon(Icons.notes, color: AppColors.primaryInk),
+                        prefixIcon: const Icon(Icons.notes_rounded, color: AppColors.slateSteel),
                       ),
                       const SizedBox(height: 20),
 
@@ -299,10 +328,10 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       Text(
                         'PHÂN CÔNG NHÂN SỰ (C2)',
                         style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.0,
-                          color: AppColors.primaryInk,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.8,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -313,26 +342,18 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.cardWhite,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColors.primaryInk,
-                                offset: Offset(2, 2),
-                                blurRadius: 0,
-                              ),
-                            ],
+                            color: AppColors.frostBackground.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: AppColors.softIceBlue, width: 1.0),
                           ),
                           child: Row(
                             children: [
                               Container(
-                                width: 34,
-                                height: 34,
-                                decoration: BoxDecoration(
-                                  color: AppColors.primaryAccent,
+                                width: 36,
+                                height: 36,
+                                decoration: const BoxDecoration(
+                                  color: AppColors.midnightIndigo,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: AppColors.primaryInk, width: 1.5),
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
@@ -341,8 +362,8 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                       : '★',
                                   style: GoogleFonts.spaceGrotesk(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                    color: AppColors.primaryInk,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
@@ -355,22 +376,22 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                       'NGƯỜI PHỤ TRÁCH CHÍNH',
                                       style: GoogleFonts.jetBrainsMono(
                                         fontSize: 9,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors.secondaryText,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.slateSteel,
                                       ),
                                     ),
                                     Text(
                                       _primaryAssignee?.fullName ?? 'Mặc định (Bạn)',
                                       style: GoogleFonts.spaceGrotesk(
                                         fontSize: 14,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors.primaryInk,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.obsidianDark,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.primaryInk),
+                              const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: AppColors.slateSteel),
                             ],
                           ),
                         ),
@@ -383,21 +404,22 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                         child: Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: AppColors.cardWhite,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: AppColors.primaryInk,
-                                offset: Offset(2, 2),
-                                blurRadius: 0,
-                              ),
-                            ],
+                            color: AppColors.frostBackground.withValues(alpha: 0.5),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: AppColors.softIceBlue, width: 1.0),
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.group_add, color: AppColors.primaryInk, size: 22),
-                              const SizedBox(width: 10),
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFE8F1FC),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Icon(Icons.group_add_rounded, color: AppColors.royalCobalt, size: 20),
+                              ),
+                              const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,8 +428,8 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                       'THÀNH VIÊN CÙNG THAM GIA',
                                       style: GoogleFonts.jetBrainsMono(
                                         fontSize: 9,
-                                        fontWeight: FontWeight.w800,
-                                        color: AppColors.secondaryText,
+                                        fontWeight: FontWeight.w700,
+                                        color: AppColors.slateSteel,
                                       ),
                                     ),
                                     Text(
@@ -416,16 +438,16 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                           : 'Đã chọn ${_collaborators.length} thành viên',
                                       style: GoogleFonts.spaceGrotesk(
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.w600,
                                         color: _collaborators.isEmpty
-                                            ? AppColors.secondaryText
-                                            : AppColors.primaryInk,
+                                            ? AppColors.slateSteel
+                                            : AppColors.obsidianDark,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_right, size: 20, color: AppColors.primaryInk),
+                              const Icon(Icons.chevron_right_rounded, size: 22, color: AppColors.slateSteel),
                             ],
                           ),
                         ),
@@ -436,10 +458,10 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       Text(
                         'THỜI GIAN THỰC HIỆN',
                         style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 1.0,
-                          color: AppColors.primaryInk,
+                          letterSpacing: 0.8,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -452,19 +474,12 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                                 decoration: BoxDecoration(
                                   color: AppColors.cardWhite,
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: AppColors.primaryInk,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 0,
-                                    ),
-                                  ],
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: AppColors.softIceBlue, width: 1.0),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.primaryInk),
+                                    const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.skyAzure),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Column(
@@ -475,15 +490,15 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                             style: GoogleFonts.jetBrainsMono(
                                               fontSize: 9,
                                               fontWeight: FontWeight.w700,
-                                              color: AppColors.secondaryText,
+                                              color: AppColors.slateSteel,
                                             ),
                                           ),
                                           Text(
                                             _startDate != null ? dateFormat.format(_startDate!) : 'Chọn ngày',
                                             style: GoogleFonts.spaceGrotesk(
                                               fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                              color: _startDate != null ? AppColors.primaryInk : AppColors.secondaryText,
+                                              fontWeight: FontWeight.w600,
+                                              color: _startDate != null ? AppColors.obsidianDark : AppColors.slateSteel,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -496,7 +511,7 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Expanded(
                             child: GestureDetector(
                               onTap: () => _pickDate(isStart: false),
@@ -504,19 +519,12 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                                 decoration: BoxDecoration(
                                   color: AppColors.cardWhite,
-                                  borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: AppColors.primaryInk, width: 1.5),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                      color: AppColors.primaryInk,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 0,
-                                    ),
-                                  ],
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: AppColors.softIceBlue, width: 1.0),
                                 ),
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.event_available_outlined, size: 16, color: AppColors.danger),
+                                    const Icon(Icons.event_available_rounded, size: 16, color: AppColors.terracottaAlert),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Column(
@@ -527,15 +535,15 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                                             style: GoogleFonts.jetBrainsMono(
                                               fontSize: 9,
                                               fontWeight: FontWeight.w700,
-                                              color: AppColors.danger,
+                                              color: AppColors.terracottaAlert,
                                             ),
                                           ),
                                           Text(
                                             _dueDate != null ? dateFormat.format(_dueDate!) : 'Chọn hạn',
                                             style: GoogleFonts.spaceGrotesk(
                                               fontSize: 13,
-                                              fontWeight: FontWeight.w700,
-                                              color: _dueDate != null ? AppColors.primaryInk : AppColors.secondaryText,
+                                              fontWeight: FontWeight.w600,
+                                              color: _dueDate != null ? AppColors.obsidianDark : AppColors.slateSteel,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -556,20 +564,20 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       Text(
                         'MỨC ĐỘ ƯU TIÊN',
                         style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 1.0,
-                          color: AppColors.primaryInk,
+                          letterSpacing: 0.8,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          _buildPriorityOption('low', 'THẤP', AppColors.secondarySurface),
+                          _buildPriorityOption('low', 'THẤP', AppColors.frostBackground, AppColors.slateSteel),
                           const SizedBox(width: 8),
-                          _buildPriorityOption('medium', 'TRUNG BÌNH', AppColors.primaryAccent),
+                          _buildPriorityOption('medium', 'TRUNG BÌNH', const Color(0xFFFFF7E6), const Color(0xFFD48806)),
                           const SizedBox(width: 8),
-                          _buildPriorityOption('high', 'CAO / KHẨN', AppColors.danger),
+                          _buildPriorityOption('high', 'CAO / KHẨN', AppColors.terracottaAlertLight, AppColors.terracottaAlert),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -578,18 +586,18 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       Text(
                         'TRẠNG THÁI BAN ĐẦU',
                         style: GoogleFonts.jetBrainsMono(
-                          fontSize: 12,
+                          fontSize: 11,
                           fontWeight: FontWeight.w700,
-                          letterSpacing: 1.0,
-                          color: AppColors.primaryInk,
+                          letterSpacing: 0.8,
+                          color: AppColors.slateSteel,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          _buildStatusOption('todo', 'CHƯA THỰC HIỆN'),
+                          _buildStatusOption('todo', 'CHỜ XỬ LÝ'),
                           const SizedBox(width: 8),
-                          _buildStatusOption('in_progress', 'ĐANG THỰC HIỆN'),
+                          _buildStatusOption('in_progress', 'ĐANG LÀM'),
                         ],
                       ),
                       const SizedBox(height: 28),
@@ -597,12 +605,12 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
                       // Nút Tạo công việc
                       BrutalistButton(
                         text: 'TẠO CÔNG VIỆC MỚI',
-                        icon: Icons.check,
+                        icon: Icons.check_circle_outline_rounded,
                         isLoading: _isLoading,
                         width: double.infinity,
-                        height: 52,
-                        backgroundColor: AppColors.primaryAccent,
-                        textColor: AppColors.primaryInk,
+                        height: 50,
+                        backgroundColor: AppColors.royalCobalt,
+                        textColor: Colors.white,
                         onPressed: _handleCreateTask,
                       ),
                     ],
@@ -616,9 +624,8 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
     );
   }
 
-  Widget _buildPriorityOption(String value, String label, Color color) {
+  Widget _buildPriorityOption(String value, String label, Color bgLight, Color accentColor) {
     final isSelected = _priority == value;
-    final isHigh = value == 'high';
 
     return Expanded(
       child: GestureDetector(
@@ -627,32 +634,24 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
             _priority = value;
           });
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           decoration: BoxDecoration(
-            color: isSelected ? color : AppColors.cardWhite,
-            borderRadius: BorderRadius.circular(6),
+            color: isSelected ? bgLight : AppColors.cardWhite,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primaryInk,
-              width: isSelected ? 2.5 : 1.5,
+              color: isSelected ? accentColor : AppColors.softIceBlue,
+              width: isSelected ? 1.5 : 1.0,
             ),
-            boxShadow: isSelected
-                ? const [
-                    BoxShadow(
-                      color: AppColors.primaryInk,
-                      offset: Offset(2, 2),
-                      blurRadius: 0,
-                    ),
-                  ]
-                : null,
           ),
           alignment: Alignment.center,
           child: Text(
             label,
             style: GoogleFonts.jetBrainsMono(
               fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-              color: isSelected && isHigh ? Colors.white : AppColors.primaryInk,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+              color: isSelected ? accentColor : AppColors.slateSteel,
             ),
           ),
         ),
@@ -670,32 +669,24 @@ class _TaskCreateScreenState extends State<TaskCreateScreen> {
             _status = value;
           });
         },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primaryAccent : AppColors.cardWhite,
-            borderRadius: BorderRadius.circular(6),
+            color: isSelected ? AppColors.royalCobalt : AppColors.cardWhite,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primaryInk,
-              width: isSelected ? 2.5 : 1.5,
+              color: isSelected ? AppColors.royalCobalt : AppColors.softIceBlue,
+              width: 1.0,
             ),
-            boxShadow: isSelected
-                ? const [
-                    BoxShadow(
-                      color: AppColors.primaryInk,
-                      offset: Offset(2, 2),
-                      blurRadius: 0,
-                    ),
-                  ]
-                : null,
           ),
           alignment: Alignment.center,
           child: Text(
             label,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-              color: AppColors.primaryInk,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              color: isSelected ? Colors.white : AppColors.slateSteel,
             ),
           ),
         ),

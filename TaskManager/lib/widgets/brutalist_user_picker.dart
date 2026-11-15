@@ -145,33 +145,28 @@ class _UserPickerModalState extends State<_UserPickerModal> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       margin: EdgeInsets.only(bottom: bottomInset),
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        border: const Border(
-          top: BorderSide(color: AppColors.primaryInk, width: 3),
-          left: BorderSide(color: AppColors.primaryInk, width: 2),
-          right: BorderSide(color: AppColors.primaryInk, width: 2),
-        ),
-        boxShadow: const [
+      decoration: const BoxDecoration(
+        color: AppColors.cardWhite,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
           BoxShadow(
-            color: AppColors.primaryInk,
-            offset: Offset(0, -3),
-            blurRadius: 0,
+            color: Color(0x1A03040B),
+            offset: Offset(0, -4),
+            blurRadius: 20,
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Drag handle
           Center(
             child: Container(
-              width: 48,
-              height: 5,
+              width: 44,
+              height: 4,
               decoration: BoxDecoration(
-                color: AppColors.primaryInk,
+                color: AppColors.softIceBlue,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -186,30 +181,30 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                 widget.title,
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 16,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
-                  color: AppColors.primaryInk,
+                  color: AppColors.obsidianDark,
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: AppColors.primaryInk),
+                icon: const Icon(Icons.close_rounded, color: AppColors.slateSteel),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
           ),
           const SizedBox(height: 12),
 
-          // Search Field (Brutalist style)
+          // Search Field (SaaS soft style)
           Container(
             decoration: BoxDecoration(
               color: AppColors.cardWhite,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.primaryInk, width: 2),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: AppColors.softIceBlue, width: 1.0),
               boxShadow: const [
                 BoxShadow(
-                  color: AppColors.primaryInk,
-                  offset: Offset(3, 3),
-                  blurRadius: 0,
+                  color: Color(0x0603040B),
+                  offset: Offset(0, 2),
+                  blurRadius: 8,
                 ),
               ],
             ),
@@ -218,8 +213,8 @@ class _UserPickerModalState extends State<_UserPickerModal> {
               onChanged: _searchUsers,
               style: GoogleFonts.inter(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: AppColors.primaryInk,
+                fontWeight: FontWeight.w500,
+                color: AppColors.obsidianDark,
               ),
               decoration: InputDecoration(
                 hintText: 'Nhập email hoặc họ tên để tìm...',
@@ -346,14 +341,17 @@ class _UserPickerModalState extends State<_UserPickerModal> {
                                         height: 24,
                                         decoration: BoxDecoration(
                                           color: isSelected
-                                              ? AppColors.primaryInk
+                                              ? AppColors.royalCobalt
                                               : AppColors.cardWhite,
-                                          borderRadius: BorderRadius.circular(4),
-                                          border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color: isSelected ? AppColors.royalCobalt : AppColors.softIceBlue,
+                                            width: 1.0,
+                                          ),
                                         ),
                                         alignment: Alignment.center,
                                         child: isSelected
-                                            ? const Icon(Icons.check, size: 16, color: Colors.white)
+                                            ? const Icon(Icons.check_rounded, size: 16, color: Colors.white)
                                             : null,
                                       ),
                                     ],
@@ -369,9 +367,9 @@ class _UserPickerModalState extends State<_UserPickerModal> {
             const SizedBox(height: 14),
             BrutalistButton(
               text: 'XÁC NHẬN CHỌN (${_selectedUsers.length})',
-              icon: Icons.check,
-              backgroundColor: AppColors.primaryAccent,
-              textColor: AppColors.primaryInk,
+              icon: Icons.check_rounded,
+              backgroundColor: AppColors.royalCobalt,
+              textColor: Colors.white,
               onPressed: () => Navigator.of(context).pop(_selectedUsers),
             ),
           ],

@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import '../../models/task.dart';
 import '../../services/task_service.dart';
 import '../../utils/app_colors.dart';
-import '../../widgets/brutalist_badge.dart';
 import '../../widgets/brutalist_button.dart';
-import '../../widgets/brutalist_card.dart';
 import '../../widgets/brutalist_text_field.dart';
 
+/// Màn hình chỉnh sửa công việc chuẩn Modern B2B SaaS (Frost Blue & Deep Obsidian)
+/// Tuân thủ quy chuẩn skill flutter-saas-builder: Form Validation, Bo góc 14-20px, Viền mảnh 1px softIceBlue
 class TaskEditScreen extends StatefulWidget {
   final Task task;
 
@@ -63,10 +63,10 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-            primary: AppColors.primaryInk,
-            onPrimary: AppColors.cardWhite,
+            primary: AppColors.royalCobalt,
+            onPrimary: Colors.white,
             surface: AppColors.cardWhite,
-            onSurface: AppColors.primaryInk,
+            onSurface: AppColors.obsidianDark,
           ),
         ),
         child: child!,
@@ -89,10 +89,10 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
       builder: (context, child) => Theme(
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.light(
-            primary: AppColors.primaryInk,
-            onPrimary: AppColors.cardWhite,
+            primary: AppColors.royalCobalt,
+            onPrimary: Colors.white,
             surface: AppColors.cardWhite,
-            onSurface: AppColors.primaryInk,
+            onSurface: AppColors.obsidianDark,
           ),
         ),
         child: child!,
@@ -136,7 +136,9 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: AppColors.primaryInk,
+          backgroundColor: AppColors.royalCobalt,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       );
 
@@ -153,28 +155,24 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat('dd/MM/yyyy');
+
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
+      backgroundColor: AppColors.frostBackground,
       appBar: AppBar(
+        backgroundColor: AppColors.frostBackground,
+        elevation: 0,
         title: Text(
-          'CHỈNH SỬA CÔNG VIỆC // B4',
+          'Chỉnh sửa công việc',
           style: GoogleFonts.spaceGrotesk(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 1.0,
-            color: AppColors.primaryInk,
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            color: AppColors.primaryInk,
-            height: 2,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.obsidianDark,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -183,28 +181,52 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  BrutalistBadge(
-                    text: 'EDIT MODE // TASK OPS',
-                    backgroundColor: AppColors.primaryAccent,
-                    textColor: AppColors.primaryInk,
-                    icon: Icons.edit,
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEBF3FC),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.softIceBlue, width: 0.8),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.edit_note_rounded, size: 14, color: AppColors.royalCobalt),
+                        const SizedBox(width: 4),
+                        Text(
+                          'EDIT MODE // B4',
+                          style: GoogleFonts.jetBrainsMono(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.royalCobalt,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  BrutalistBadge(
-                    text: '#${widget.task.id.length > 6 ? widget.task.id.substring(widget.task.id.length - 6).toUpperCase() : widget.task.id}',
-                    backgroundColor: AppColors.secondarySurface,
-                    textColor: AppColors.primaryInk,
+                  Text(
+                    '#${widget.task.id.length > 6 ? widget.task.id.substring(widget.task.id.length - 6).toUpperCase() : widget.task.id}',
+                    style: GoogleFonts.jetBrainsMono(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.slateSteel,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
 
               if (_errorMessage != null) ...[
-                BrutalistCard(
-                  backgroundColor: const Color(0xFFFED7D7),
+                Container(
                   padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.terracottaAlertLight,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: const Color(0xFFF3C7C2), width: 1.0),
+                  ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error, color: AppColors.danger, size: 20),
+                      const Icon(Icons.error_outline_rounded, color: AppColors.terracottaAlert, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -212,191 +234,240 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.danger,
+                            color: AppColors.terracottaAlert,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
               ],
 
-              // Tiêu đề
-              BrutalistTextField(
-                label: 'TIÊU ĐỀ CÔNG VIỆC *',
-                controller: _titleController,
-                hintText: 'Nhập tiêu đề công việc...',
-                prefixIcon: const Icon(Icons.title, color: AppColors.primaryInk),
-                validator: (val) {
-                  if (val == null || val.trim().isEmpty) {
-                    return 'Tiêu đề không được để trống';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Mô tả
-              BrutalistTextField(
-                label: 'MÔ TẢ CHI TIẾT',
-                controller: _descController,
-                hintText: 'Nhập mô tả chi tiết yêu cầu công việc...',
-                prefixIcon: const Icon(Icons.notes, color: AppColors.primaryInk),
-                maxLines: 4,
-              ),
-              const SizedBox(height: 20),
-
-              // Trạng thái hiện tại
-              Text(
-                'TRẠNG THÁI TIẾN ĐỘ',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryInk,
+              // Card Form
+              Container(
+                padding: const EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: AppColors.cardWhite,
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x0A03040B),
+                      offset: Offset(0, 4),
+                      blurRadius: 16,
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  _buildStatusChip('todo', 'CHỜ XỬ LÝ', AppColors.secondarySurface),
-                  const SizedBox(width: 8),
-                  _buildStatusChip('in_progress', 'ĐANG LÀM', AppColors.primaryAccent),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  _buildStatusChip('completed', 'HOÀN THÀNH', const Color(0xFF9AE6B4)),
-                  const SizedBox(width: 8),
-                  _buildStatusChip('cancelled', 'ĐÃ HỦY', AppColors.danger, textWhite: true),
-                ],
-              ),
-              const SizedBox(height: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Tiêu đề
+                    BrutalistTextField(
+                      label: 'Tiêu đề công việc *',
+                      controller: _titleController,
+                      hintText: 'Nhập tiêu đề công việc...',
+                      prefixIcon: const Icon(Icons.title_rounded, color: AppColors.slateSteel),
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) {
+                          return 'Tiêu đề không được để trống';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
 
-              // Mức độ ưu tiên
-              Text(
-                'MỨC ĐỘ ƯU TIÊN',
-                style: GoogleFonts.jetBrainsMono(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.primaryInk,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  _buildPriorityChip('low', 'THẤP', AppColors.secondarySurface),
-                  const SizedBox(width: 8),
-                  _buildPriorityChip('medium', 'TRUNG BÌNH', AppColors.primaryAccent),
-                  const SizedBox(width: 8),
-                  _buildPriorityChip('high', 'CAO', AppColors.danger, textWhite: true),
-                ],
-              ),
-              const SizedBox(height: 20),
+                    // Mô tả
+                    BrutalistTextField(
+                      label: 'Mô tả chi tiết',
+                      controller: _descController,
+                      hintText: 'Nhập mô tả chi tiết yêu cầu công việc...',
+                      prefixIcon: const Icon(Icons.notes_rounded, color: AppColors.slateSteel),
+                      maxLines: 4,
+                    ),
+                    const SizedBox(height: 20),
 
-              // Thời gian bắt đầu & hạn chót
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // Trạng thái hiện tại
+                    Text(
+                      'TRẠNG THÁI TIẾN ĐỘ',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: AppColors.slateSteel,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
-                        Text(
-                          'NGÀY BẮT ĐẦU',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primaryInk,
+                        _buildStatusOption('todo', 'CHỜ XỬ LÝ'),
+                        const SizedBox(width: 8),
+                        _buildStatusOption('in_progress', 'ĐANG LÀM'),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildStatusOption('completed', 'HOÀN THÀNH'),
+                        const SizedBox(width: 8),
+                        _buildStatusOption('cancelled', 'ĐÃ HỦY'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Mức độ ưu tiên
+                    Text(
+                      'MỨC ĐỘ ƯU TIÊN',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: AppColors.slateSteel,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildPriorityOption('low', 'THẤP', AppColors.frostBackground, AppColors.slateSteel),
+                        const SizedBox(width: 8),
+                        _buildPriorityOption('medium', 'TRUNG BÌNH', const Color(0xFFFFF7E6), const Color(0xFFD48806)),
+                        const SizedBox(width: 8),
+                        _buildPriorityOption('high', 'CAO', AppColors.terracottaAlertLight, AppColors.terracottaAlert),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Thời gian bắt đầu & hạn chót
+                    Text(
+                      'THỜI GIAN THỰC HIỆN',
+                      style: GoogleFonts.jetBrainsMono(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.8,
+                        color: AppColors.slateSteel,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _pickStartDate,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.cardWhite,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.calendar_today_rounded, size: 16, color: AppColors.skyAzure),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'BẮT ĐẦU',
+                                          style: GoogleFonts.jetBrainsMono(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.slateSteel,
+                                          ),
+                                        ),
+                                        Text(
+                                          _startDate != null ? dateFormat.format(_startDate!) : 'Chọn ngày',
+                                          style: GoogleFonts.spaceGrotesk(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: _startDate != null ? AppColors.obsidianDark : AppColors.slateSteel,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 6),
-                        GestureDetector(
-                          onTap: _pickStartDate,
-                          child: BrutalistCard(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            backgroundColor: AppColors.cardWhite,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.calendar_today, size: 16, color: AppColors.primaryInk),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _startDate != null
-                                      ? DateFormat('dd/MM/yyyy').format(_startDate!)
-                                      : 'CHỌN NGÀY',
-                                  style: GoogleFonts.jetBrainsMono(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primaryInk,
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _pickDueDate,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.cardWhite,
+                                borderRadius: BorderRadius.circular(14),
+                                border: Border.all(color: AppColors.softIceBlue, width: 1.0),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.event_available_rounded, size: 16, color: AppColors.terracottaAlert),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'HẠN CHÓT',
+                                          style: GoogleFonts.jetBrainsMono(
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColors.terracottaAlert,
+                                          ),
+                                        ),
+                                        Text(
+                                          _dueDate != null ? dateFormat.format(_dueDate!) : 'Chọn hạn',
+                                          style: GoogleFonts.spaceGrotesk(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w600,
+                                            color: _dueDate != null ? AppColors.obsidianDark : AppColors.slateSteel,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'HẠN HOÀN THÀNH',
-                          style: GoogleFonts.jetBrainsMono(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primaryInk,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        GestureDetector(
-                          onTap: _pickDueDate,
-                          child: BrutalistCard(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            backgroundColor: AppColors.cardWhite,
-                            child: Row(
-                              children: [
-                                const Icon(Icons.event_available, size: 16, color: AppColors.primaryInk),
-                                const SizedBox(width: 8),
-                                Text(
-                                  _dueDate != null
-                                      ? DateFormat('dd/MM/yyyy').format(_dueDate!)
-                                      : 'CHỌN HẠN',
-                                  style: GoogleFonts.jetBrainsMono(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.primaryInk,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 32),
+                    const SizedBox(height: 28),
 
-              // Submit & Cancel buttons
-              BrutalistButton(
-                text: 'LƯU THAY ĐỔI',
-                icon: Icons.check,
-                backgroundColor: AppColors.primaryAccent,
-                textColor: AppColors.primaryInk,
-                isLoading: _isLoading,
-                onPressed: _submitUpdate,
-              ),
-              const SizedBox(height: 12),
-              BrutalistButton(
-                text: 'HỦY BỎ',
-                icon: Icons.close,
-                backgroundColor: AppColors.secondarySurface,
-                textColor: AppColors.primaryInk,
-                onPressed: () => Navigator.of(context).pop(),
+                    // Submit & Cancel buttons
+                    BrutalistButton(
+                      text: 'LƯU THAY ĐỔI',
+                      icon: Icons.check_rounded,
+                      backgroundColor: AppColors.royalCobalt,
+                      textColor: Colors.white,
+                      isLoading: _isLoading,
+                      onPressed: _submitUpdate,
+                    ),
+                    const SizedBox(height: 10),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'HỦY BỎ',
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.slateSteel,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -405,37 +476,30 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
     );
   }
 
-  Widget _buildStatusChip(String value, String label, Color color, {bool textWhite = false}) {
+  Widget _buildStatusOption(String value, String label) {
     final isSelected = _status == value;
+
     return Expanded(
       child: GestureDetector(
         onTap: () => setState(() => _status = value),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           decoration: BoxDecoration(
-            color: isSelected ? color : AppColors.cardWhite,
-            borderRadius: BorderRadius.circular(6),
+            color: isSelected ? AppColors.royalCobalt : AppColors.cardWhite,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primaryInk,
-              width: isSelected ? 2.5 : 1.5,
+              color: isSelected ? AppColors.royalCobalt : AppColors.softIceBlue,
+              width: 1.0,
             ),
-            boxShadow: isSelected
-                ? const [
-                    BoxShadow(
-                      color: AppColors.primaryInk,
-                      offset: Offset(2, 2),
-                      blurRadius: 0,
-                    ),
-                  ]
-                : null,
           ),
           alignment: Alignment.center,
           child: Text(
             label,
-            style: GoogleFonts.jetBrainsMono(
-              fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-              color: isSelected && textWhite ? Colors.white : AppColors.primaryInk,
+            style: GoogleFonts.inter(
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+              color: isSelected ? Colors.white : AppColors.slateSteel,
             ),
           ),
         ),
@@ -443,37 +507,30 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
     );
   }
 
-  Widget _buildPriorityChip(String value, String label, Color color, {bool textWhite = false}) {
+  Widget _buildPriorityOption(String value, String label, Color bgLight, Color accentColor) {
     final isSelected = _priority == value;
+
     return Expanded(
       child: GestureDetector(
         onTap: () => setState(() => _priority = value),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: const EdgeInsets.symmetric(vertical: 11),
           decoration: BoxDecoration(
-            color: isSelected ? color : AppColors.cardWhite,
-            borderRadius: BorderRadius.circular(6),
+            color: isSelected ? bgLight : AppColors.cardWhite,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: AppColors.primaryInk,
-              width: isSelected ? 2.5 : 1.5,
+              color: isSelected ? accentColor : AppColors.softIceBlue,
+              width: isSelected ? 1.5 : 1.0,
             ),
-            boxShadow: isSelected
-                ? const [
-                    BoxShadow(
-                      color: AppColors.primaryInk,
-                      offset: Offset(2, 2),
-                      blurRadius: 0,
-                    ),
-                  ]
-                : null,
           ),
           alignment: Alignment.center,
           child: Text(
             label,
             style: GoogleFonts.jetBrainsMono(
               fontSize: 11,
-              fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
-              color: isSelected && textWhite ? Colors.white : AppColors.primaryInk,
+              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+              color: isSelected ? accentColor : AppColors.slateSteel,
             ),
           ),
         ),

@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/task.dart';
 import '../services/task_service.dart';
 import '../utils/app_colors.dart';
-import 'brutalist_card.dart';
 
+/// Modal chuyển trạng thái nhanh chuẩn phong cách Modern B2B SaaS (Frost-Obsidian: Bo góc 24px, viền mảnh softIceBlue)
 class QuickStatusBottomSheet {
   static void show({
     required BuildContext context,
@@ -74,7 +74,9 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: AppColors.primaryInk,
+          backgroundColor: AppColors.royalCobalt,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -89,7 +91,9 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
               'LỖI: ${e.toString().replaceAll('Exception: ', '')}',
               style: GoogleFonts.inter(fontWeight: FontWeight.w600),
             ),
-            backgroundColor: AppColors.danger,
+            backgroundColor: AppColors.terracottaAlert,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
       }
@@ -99,23 +103,18 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        border: const Border(
-          top: BorderSide(color: AppColors.primaryInk, width: 3),
-          left: BorderSide(color: AppColors.primaryInk, width: 2),
-          right: BorderSide(color: AppColors.primaryInk, width: 2),
-        ),
-        boxShadow: const [
+      decoration: const BoxDecoration(
+        color: AppColors.cardWhite,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
           BoxShadow(
-            color: AppColors.primaryInk,
-            offset: Offset(0, -3),
-            blurRadius: 0,
+            color: Color(0x1A03040B),
+            offset: Offset(0, -4),
+            blurRadius: 20,
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,10 +122,10 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
           // Drag handle bar
           Center(
             child: Container(
-              width: 48,
-              height: 5,
+              width: 44,
+              height: 4,
               decoration: BoxDecoration(
-                color: AppColors.primaryInk,
+                color: AppColors.softIceBlue,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -137,8 +136,8 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
             'CHUYỂN TRẠNG THÁI NHANH (B4)',
             style: GoogleFonts.spaceGrotesk(
               fontSize: 18,
-              fontWeight: FontWeight.w900,
-              color: AppColors.primaryInk,
+              fontWeight: FontWeight.w700,
+              color: AppColors.obsidianDark,
             ),
           ),
           const SizedBox(height: 4),
@@ -148,8 +147,8 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.inter(
               fontSize: 13,
-              fontWeight: FontWeight.w600,
-              color: AppColors.secondaryText,
+              fontWeight: FontWeight.w500,
+              color: AppColors.slateSteel,
             ),
           ),
           const SizedBox(height: 18),
@@ -159,8 +158,8 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
               padding: EdgeInsets.symmetric(vertical: 24.0),
               child: Center(
                 child: CircularProgressIndicator(
-                  color: AppColors.primaryInk,
-                  strokeWidth: 3,
+                  color: AppColors.royalCobalt,
+                  strokeWidth: 2.5,
                 ),
               ),
             )
@@ -169,36 +168,39 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
               status: 'todo',
               title: 'CHỜ XỬ LÝ (TODO)',
               subtitle: 'Công việc mới tiếp nhận hoặc chưa bắt đầu',
-              color: AppColors.secondarySurface,
-              icon: Icons.hourglass_empty,
+              activeBg: AppColors.frostBackground,
+              accentColor: AppColors.slateSteel,
+              icon: Icons.hourglass_empty_rounded,
             ),
             const SizedBox(height: 10),
             _buildStatusOption(
               status: 'in_progress',
               title: 'ĐANG LÀM (IN PROGRESS)',
               subtitle: 'Đang trong quá trình triển khai thực hiện',
-              color: AppColors.primaryAccent,
-              icon: Icons.sync,
+              activeBg: const Color(0xFFE8F4FD),
+              accentColor: AppColors.skyAzure,
+              icon: Icons.sync_rounded,
             ),
             const SizedBox(height: 10),
             _buildStatusOption(
               status: 'completed',
               title: 'HOÀN THÀNH (COMPLETED)',
               subtitle: 'Đã hoàn tất toàn bộ yêu cầu công việc',
-              color: const Color(0xFF9AE6B4),
-              icon: Icons.check_circle_outline,
+              activeBg: AppColors.successMintLight,
+              accentColor: AppColors.successMint,
+              icon: Icons.check_circle_rounded,
             ),
             const SizedBox(height: 10),
             _buildStatusOption(
               status: 'cancelled',
               title: 'ĐÃ HỦY (CANCELLED)',
               subtitle: 'Hủy bỏ không tiếp tục thực hiện',
-              color: AppColors.danger,
+              activeBg: AppColors.terracottaAlertLight,
+              accentColor: AppColors.terracottaAlert,
               icon: Icons.cancel_outlined,
-              textWhite: true,
             ),
           ],
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
         ],
       ),
     );
@@ -208,29 +210,44 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
     required String status,
     required String title,
     required String subtitle,
-    required Color color,
+    required Color activeBg,
+    required Color accentColor,
     required IconData icon,
-    bool textWhite = false,
   }) {
     final isCurrent = _selectedStatus == status;
 
     return GestureDetector(
       onTap: () => _updateStatus(status),
-      child: BrutalistCard(
-        backgroundColor: isCurrent ? color : AppColors.cardWhite,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: isCurrent ? activeBg : AppColors.cardWhite,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isCurrent ? accentColor : AppColors.softIceBlue,
+            width: isCurrent ? 1.5 : 1.0,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0603040B),
+              offset: Offset(0, 2),
+              blurRadius: 8,
+            ),
+          ],
+        ),
         child: Row(
           children: [
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isCurrent && textWhite ? Colors.white : AppColors.primaryInk,
+                color: isCurrent ? accentColor : AppColors.frostBackground,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
                 size: 16,
-                color: isCurrent && textWhite ? AppColors.danger : Colors.white,
+                color: isCurrent ? Colors.white : AppColors.slateSteel,
               ),
             ),
             const SizedBox(width: 12),
@@ -242,18 +259,16 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
                     title,
                     style: GoogleFonts.spaceGrotesk(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
-                      color: isCurrent && textWhite ? Colors.white : AppColors.primaryInk,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.obsidianDark,
                     ),
                   ),
                   Text(
                     subtitle,
                     style: GoogleFonts.inter(
                       fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: isCurrent && textWhite
-                          ? Colors.white.withValues(alpha: 0.9)
-                          : AppColors.secondaryText,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.slateSteel,
                     ),
                   ),
                 ],
@@ -261,8 +276,8 @@ class _QuickStatusModalContentState extends State<_QuickStatusModalContent> {
             ),
             if (isCurrent)
               Icon(
-                Icons.check,
-                color: textWhite ? Colors.white : AppColors.primaryInk,
+                Icons.check_circle_rounded,
+                color: accentColor,
                 size: 20,
               ),
           ],

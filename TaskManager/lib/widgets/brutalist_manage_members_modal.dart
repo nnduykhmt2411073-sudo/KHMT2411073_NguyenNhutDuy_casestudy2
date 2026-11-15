@@ -222,33 +222,28 @@ class _ManageMembersContentState extends State<_ManageMembersContent> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
-      decoration: BoxDecoration(
-        color: AppColors.scaffoldBackground,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        border: const Border(
-          top: BorderSide(color: AppColors.primaryInk, width: 3),
-          left: BorderSide(color: AppColors.primaryInk, width: 2),
-          right: BorderSide(color: AppColors.primaryInk, width: 2),
-        ),
-        boxShadow: const [
+      decoration: const BoxDecoration(
+        color: AppColors.cardWhite,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        boxShadow: [
           BoxShadow(
-            color: AppColors.primaryInk,
-            offset: Offset(0, -3),
-            blurRadius: 0,
+            color: Color(0x1A03040B),
+            offset: Offset(0, -4),
+            blurRadius: 20,
           ),
         ],
       ),
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Drag handle
           Center(
             child: Container(
-              width: 48,
-              height: 5,
+              width: 44,
+              height: 4,
               decoration: BoxDecoration(
-                color: AppColors.primaryInk,
+                color: AppColors.softIceBlue,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -263,9 +258,9 @@ class _ManageMembersContentState extends State<_ManageMembersContent> {
                 'QUẢN LÝ THÀNH VIÊN // C4',
                 style: GoogleFonts.spaceGrotesk(
                   fontSize: 16,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w700,
                   letterSpacing: 0.5,
-                  color: AppColors.primaryInk,
+                  color: AppColors.obsidianDark,
                 ),
               ),
               IconButton(
@@ -430,8 +425,8 @@ class _ManageMembersContentState extends State<_ManageMembersContent> {
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: roleBg,
-                                        borderRadius: BorderRadius.circular(4),
-                                        border: Border.all(color: AppColors.primaryInk, width: 1.5),
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(color: AppColors.softIceBlue, width: 0.8),
                                       ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -440,12 +435,12 @@ class _ManageMembersContentState extends State<_ManageMembersContent> {
                                             member.role.toUpperCase(),
                                             style: GoogleFonts.jetBrainsMono(
                                               fontSize: 9,
-                                              fontWeight: FontWeight.w900,
+                                              fontWeight: FontWeight.w700,
                                               color: roleText,
                                             ),
                                           ),
                                           const SizedBox(width: 4),
-                                          Icon(Icons.arrow_drop_down, size: 14, color: roleText),
+                                          Icon(Icons.arrow_drop_down_rounded, size: 14, color: roleText),
                                         ],
                                       ),
                                     ),

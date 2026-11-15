@@ -67,6 +67,8 @@ class ApiClient {
     return ApiException('Không thể kết nối đến máy chủ: $e');
   }
 
+  static const Duration _timeoutDuration = Duration(seconds: 15);
+
   Future<dynamic> get(String endpoint, {Map<String, dynamic>? queryParameters}) async {
     try {
       final headers = await _getHeaders();
@@ -74,7 +76,7 @@ class ApiClient {
       if (queryParameters != null && queryParameters.isNotEmpty) {
         uri = uri.replace(queryParameters: queryParameters);
       }
-      final response = await http.get(uri, headers: headers);
+      final response = await http.get(uri, headers: headers).timeout(_timeoutDuration);
       return _handleResponse(response);
     } catch (e) {
       throw _formatError(e);
@@ -89,7 +91,7 @@ class ApiClient {
         uri,
         headers: headers,
         body: jsonEncode(data),
-      );
+      ).timeout(_timeoutDuration);
       return _handleResponse(response);
     } catch (e) {
       throw _formatError(e);
@@ -104,7 +106,7 @@ class ApiClient {
         uri,
         headers: headers,
         body: jsonEncode(data),
-      );
+      ).timeout(_timeoutDuration);
       return _handleResponse(response);
     } catch (e) {
       throw _formatError(e);
@@ -119,7 +121,7 @@ class ApiClient {
         uri,
         headers: headers,
         body: data != null ? jsonEncode(data) : null,
-      );
+      ).timeout(_timeoutDuration);
       return _handleResponse(response);
     } catch (e) {
       throw _formatError(e);
@@ -130,7 +132,7 @@ class ApiClient {
     try {
       final headers = await _getHeaders();
       final uri = Uri.parse('$_baseUrl$endpoint');
-      final response = await http.delete(uri, headers: headers);
+      final response = await http.delete(uri, headers: headers).timeout(_timeoutDuration);
       return _handleResponse(response);
     } catch (e) {
       throw _formatError(e);

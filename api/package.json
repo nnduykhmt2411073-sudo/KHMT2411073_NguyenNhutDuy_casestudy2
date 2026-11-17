@@ -14,7 +14,7 @@
     "jwt",
     "nodemailer"
   ],
-  "author": "Huỳnh Đăng Khoa - KHMT2411074",
+  "author": "Nguyễn Nhựt Duy - KHMT2411073",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",

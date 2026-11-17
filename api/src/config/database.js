@@ -1,4 +1,11 @@
+const dns = require('dns');
 const mongoose = require('mongoose');
+
+// Dùng Google/Cloudflare DNS để đảm bảo phân giải SRV của MongoDB Atlas ổn định trên Windows
+try {
+  dns.setDefaultResultOrder?.('ipv4first');
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (_) {}
 
 const connectDB = async () => {
   try {
